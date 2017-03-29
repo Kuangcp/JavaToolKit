@@ -25,20 +25,14 @@ public class GetRunTime {
 		end = Calendar.getInstance().getTimeInMillis();
 		long waste = end-start;
 		long ms = waste,sec=0,min=0,hour=0;
-		if(ms/60000>0 && ms/60000<60){//小时内
-			min = ms/60000;
-			ms-=min*60000;
-			sec = ms/1000;
-			ms-=sec*1000;
-			
-		}else{
-			hour = ms/3600000;
-			ms-=hour*3600000;
-			min = ms/60000;
-			ms-=min*60000;
-			sec = ms/1000;
-			ms-=sec*1000;
-		}
-		System.out.println(s+"\n耗时：<"+waste+"ms>\n格式：<"+hour+"h:"+min+"m:"+sec+"s:"+ms+"ms>");
+
+		hour = ms/3600000;
+		ms-=hour*3600000;
+		min = ms/60000;
+		ms-=min*60000;
+		sec = ms/1000;
+		ms-=sec*1000;
+
+		System.out.println("========\n"+s+"\n耗时：<"+waste+"ms>\n格式：<"+hour+"h:"+min+"m:"+sec+"s:"+ms+"ms>");
 	}
 }

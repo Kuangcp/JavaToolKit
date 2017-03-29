@@ -1,5 +1,7 @@
 package com.myth.reflect;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Properties;
 /**
  * 读取 properties 文件 的类 
@@ -10,11 +12,12 @@ public class Config {
 
 	private Properties cfg = new Properties();
 	public Config(){}
+	//从src开始的全路径
 	public Config(String file){
 		try {
-			cfg.load(this.getClass().getClassLoader().getResourceAsStream(file));
+			File f = new File(file);
+			cfg.load(new FileInputStream(f));
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 			throw new RuntimeException(e); 
 		}

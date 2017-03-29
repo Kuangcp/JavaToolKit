@@ -97,7 +97,7 @@ public class MailUtils {
 		final String SendServer="smtp.163.com";
 		final String port = "25";
 		final String username="15979940275@163.com";
-		final String passcode = "asdf1429336";
+		final String passcode = "";
 		String title="欢迎使用，请激活！";
 		String contents = "<h2>你看到的是一封测试邮件</h2><br/>正如你所见，使用mail组件发送的";
 		
