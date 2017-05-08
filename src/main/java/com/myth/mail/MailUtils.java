@@ -56,7 +56,7 @@ public class MailUtils {
 	 */
 	public static void main(String[] a) {
 		System.out.println("Start Sending......");
-		sendByQQ("597356241@qq.com");
+		sendByQQ("1161502665@qq.com");
 //		sendBy163("1181951407@qq.com");
 //		sendByOutLook("15979940275@163.com");
 		System.out.println("Success!");
