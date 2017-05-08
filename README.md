@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a98ea20e4ff64eee90c43ac2a480e9a8)](https://www.codacy.com/app/Kuangcp/JavaToolKit?utm_source=github.com&utm_medium=referral&utm_content=Kuangcp/JavaToolKit&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/Kuangcp/JavaToolKit.svg?branch=master)](https://travis-ci.org/Kuangcp/JavaToolKit)
 
 
