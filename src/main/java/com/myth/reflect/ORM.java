@@ -1,5 +1,7 @@
 package com.myth.reflect;
 
+import com.myth.mysql.Mysql;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -8,15 +10,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
-import com.myth.mysql.Mysql;
-
 /**
  * 实现了一个查询记录，插入记录 
  * 
- * @author  Myth
- * @date 2016年9月10日 下午8:20:12
- * @TODO 实现了ORM类似操作
+ * @author  Myth By 2016年9月10日 下午8:20:12
+ *  实现了ORM类似操作
  */
 public class ORM {
 //	public static void main(String[] args) {
@@ -141,7 +139,7 @@ public class ORM {
 //			sb.append("'").append(value).append("'");
 //		}
 		String sql = sb.toString();
-		ResultSet rs = null;
+		ResultSet rs;
 		Mysql db = null;
 		System.out.println("查询的SQL语句是 ： "+sql);
 		try {

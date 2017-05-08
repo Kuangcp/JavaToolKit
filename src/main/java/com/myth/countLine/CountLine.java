@@ -11,9 +11,7 @@ import java.util.Scanner;
 
 /**
  * 求某路径下的所有文件的行数
- * @author  Myth
- * @date 2016年10月6日 上午11:13:03
- * @TODO
+ * @author  Myth By 2016年10月6日 上午11:13:03
  * F:\JavaWeb\EE\struts-2.5\
 java : 364940128
 jsp : 2279936
@@ -27,8 +25,8 @@ py : 0
 语句运行的耗时 :1262974 ms
  */
 public class CountLine {
-	static Map<String,Long> typeMap  = new HashMap<String,Long>();
-	static String [] type = {
+	private static Map<String,Long> typeMap  = new HashMap<>();
+	private static String [] type = {
 		"java",
 		"jsp",
 		"html",
@@ -40,8 +38,8 @@ public class CountLine {
 		"py"
 	};
 	static{
-		for (int i=0;i<type.length;i++){
-			typeMap.put(type[i], 0L);
+		for (String aType : type) {
+			typeMap.put(aType, 0L);
 		}
 	}
 	public static void main(String[] args) {
@@ -52,17 +50,15 @@ public class CountLine {
 		String path = sc.nextLine();
 		sc.close();
 		AllFile(path);
-		for(int i=0;i<type.length;i++){
-			System.out.println(type[i]+" : "+typeMap.get(type[i]));
+		for (String aType : type) {
+			System.out.println(aType + " : " + typeMap.get(aType));
 		}
 		s.End("");
 	}
 	/**
-	 * 
 	 * @param path 一个文件夹的PATH
-	 * @return 
 	 */
-	public static void AllFile(String path) {
+	private static void AllFile(String path) {
        File file = new File(path);
        if (!file.exists()) {
     	   System.out.println("文件不存在");
@@ -72,38 +68,37 @@ public class CountLine {
        }
        //file是一个文件夹
        String[] tempList = file.list();
-       File temp = null;
+       File temp;
        //遍历文件夹下所有文件
-       for (int i = 0; i < tempList.length; i++) {
-    	   //拼接好全路径
-          if (path.endsWith(File.separator)) {//如果路径是带有了系统默认的分隔符（即斜杠）就直接和文件名拼接
-             temp = new File(path + tempList[i]);
-          } else {
-              temp = new File(path + File.separator + tempList[i]);
-          }
-          //由全路径判断，如果是文件就计数，否则进入递归
-          if (temp.isFile()) {
+		for (String aTempList : tempList != null ? tempList : new String[0]) {
+			//拼接好全路径
+			if (path.endsWith(File.separator)) {//如果路径是带有了系统默认的分隔符（即斜杠）就直接和文件名拼接
+				temp = new File(path + aTempList);
+			} else {
+				temp = new File(path + File.separator + aTempList);
+			}
+			//由全路径判断，如果是文件就计数，否则进入递归
+			if (temp.isFile()) {
 //	        	 System.out.println(temp.toString());
-        	  String filename = temp.toString();
-        	  String [] fis = filename.split("\\.");
-        	  String type = fis[fis.length-1];
-        	  if(typeMap.containsKey(type)){
-        		  long rowNums = getTotalLines(filename);
-        		  long totalNums = typeMap.get(type);
+				String filename = temp.toString();
+				String[] fis = filename.split("\\.");
+				String type = fis[fis.length - 1];
+				if (typeMap.containsKey(type)) {
+					long rowNums = getTotalLines(filename);
+					long totalNums = typeMap.get(type);
 //        		  System.out.println(filename+"  :  "+rowNums);
-        		  typeMap.remove(type); 
-        		  typeMap.put(type, totalNums+rowNums);
-        	  }
-          }
-          if (temp.isDirectory()) {
-             AllFile(path + "/" + tempList[i]);//递归进入文件夹
-          }
-       }
+					typeMap.remove(type);
+					typeMap.put(type, totalNums + rowNums);
+				}
+			}
+			if (temp.isDirectory()) {
+				AllFile(path + "/" + aTempList);//递归进入文件夹
+			}
+		}
 	 }
 	/**
 	 * 获取某文件的所有行数
-	 * @param path
-	 * @return
+	 * @param path 得到路径
 	 */
 	 private static int getTotalLines(String path){
         FileReader in;

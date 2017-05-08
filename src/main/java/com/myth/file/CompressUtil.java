@@ -25,15 +25,15 @@ public class CompressUtil {
      * 使用给定密码解压指定的ZIP压缩文件到指定目录 
      * <p> 
      * 如果指定目录不存在,可以自动创建,不合法的路径将导致异常被抛出 
-     * @param zip 指定的ZIP压缩文件 
-     * @param dest 解压目录 
-     * @param passwd ZIP文件的密码 
-     * @return 解压后文件数组 
+     * @param zip 指定的ZIP压缩文件
+     * @param dest 解压目录
+     * @param passwd ZIP文件的密码
+     * @return 解压后文件数组
      * @throws ZipException 压缩文件有损坏或者解压缩失败抛出 
      */  
-    public static File [] unzip(String zip, String dest, String passwd) throws ZipException {  
-        File zipFile = new File(zip);  
-        return unzip(zipFile, dest, passwd);  
+    static void unzip(String zip, String dest, String passwd) throws ZipException {
+        File zipFile = new File(zip);
+        unzip(zipFile, dest, passwd);
     }  
       
     /** 

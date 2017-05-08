@@ -1,20 +1,16 @@
 package com.myth.reflect;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.Properties;
 /**
  * 读取 properties 文件 的类 
- * @author Myth
- * @date 2016年7月29日
+ * @author Myth By 2016年7月29日
  */
 public class Config {
 
 	private Properties cfg = new Properties();
-	public Config(){}
-	// maven 结构 resources下的a.yml : /a.yml
+
+    // maven 结构 resources下的a.yml : /a.yml
 	public Config(String path){
 		try {
 			InputStream is = this.getClass().getResourceAsStream(path);

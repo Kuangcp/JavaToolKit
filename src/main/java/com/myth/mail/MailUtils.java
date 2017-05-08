@@ -4,7 +4,6 @@ import com.myth.reflect.Config;
 import com.sun.mail.util.MailSSLSocketFactory;
 
 import javax.mail.*;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
