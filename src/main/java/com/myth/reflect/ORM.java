@@ -67,7 +67,7 @@ public class ORM {
 						String p=  (String)m.invoke(obj);
 						if(p!=null) va.append("'"+p+"',");
 					}else if(returnType==long.class || returnType==int.class ){
-						long p = (long)m.invoke(obj);
+						long p = (Long)m.invoke(obj);
 						va.append(p+",");
 					}else if( returnType==Integer.class){
 						Integer p = (Integer)m.invoke(obj);
@@ -97,9 +97,7 @@ public class ORM {
 	 * 根据类名字和一个属性名和值，来查询获取一行或多行记录对应的对象
 	 * 	对象的类必须要有无参构造器
 	 * @param className 类路径 .getclass.getName()即可
-	 * @param perproty  属性名
 	 * @param value  属性值
-	 * @param IntOrString 整型是true 否则是false
 	 * @return Object 对象
 	 */
 	public static List FindByProperty(String className,String property,String value){
