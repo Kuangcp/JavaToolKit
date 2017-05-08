@@ -19,7 +19,7 @@ public class GetRunTime {
 	}
 	/**
 	 * 输出耗费时间
-	 * @param s 起始输出的字符串
+	 * @param s 要输出的提示字符串
 	 */
 	public void End(String s){
 		end = Calendar.getInstance().getTimeInMillis();
@@ -33,6 +33,6 @@ public class GetRunTime {
 		sec = ms/1000;
 		ms-=sec*1000;
 
-		System.out.println("========\n"+s+"\n耗时：<"+waste+"ms>\n格式：<"+hour+"h:"+min+"m:"+sec+"s:"+ms+"ms>");
+		System.out.println(">>>>>>  "+s+"\n耗时：<"+waste+"ms>\n格式：<"+hour+"h:"+min+"m:"+sec+"s:"+ms+"ms>  <<<<<<");
 	}
 }

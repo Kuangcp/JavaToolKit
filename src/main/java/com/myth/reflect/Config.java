@@ -3,6 +3,7 @@ package com.myth.reflect;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.Properties;
 /**
  * 读取 properties 文件 的类 
@@ -38,16 +39,6 @@ public class Config {
 	public double getDouble(String key){
 		return Double.parseDouble(getString(key));
 	}
-	
-	/**
-	 * 测试main函数
-	 * @param p
-	 */
-//	public static void main(String [] p){
-//		Config con = new Config("mysql.properties");
-//		System.out.println(con.getString("Driver"));
-//		System.out.println(con.getString("User"));
-//		System.out.println(con.getString("Pass"));
-//		System.out.println(con.getString("URL"));
-//	}
+
+
 }
