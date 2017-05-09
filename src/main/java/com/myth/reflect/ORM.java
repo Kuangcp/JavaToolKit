@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,8 +39,8 @@ public class ORM {
 	public static boolean Insert(Object obj){
 		Class class1 = obj.getClass();
 		//使用StringBuffer的原因是为了多线程的安全，一个类似于String 字符串缓冲区，但不能修改
-		StringBuffer sb = new StringBuffer("insert into ");
-		StringBuffer va = new StringBuffer("values(");
+		StringBuilder sb = new StringBuilder("insert into ");
+		StringBuilder va = new StringBuilder("values(");
 		
 		Method [] ms = class1.getMethods();
 		Field [] fs = class1.getDeclaredFields();
@@ -56,24 +57,24 @@ public class ORM {
 			String mName = m.getName();
 			if(mName.startsWith("get") && !mName.startsWith("getClass")){//将所有get开头的方法取出来
 				String colName = mName.substring(3,mName.length());
-				sb.append(colName+",");
+				sb.append(colName).append(",");
 				Class returnType = m.getReturnType();
 //				System.out.print(mName+"方法的返回值是"+returnType.getName()+" \n");
 				
 				try {
 					if(returnType == String.class){
 						String p=  (String)m.invoke(obj);
-						if(p!=null) va.append("'"+p+"',");
+						if(p!=null) va.append("'").append(p).append("',");
 					}else if(returnType==long.class || returnType==int.class ){
 						long p = (Long)m.invoke(obj);
-						va.append(p+",");
+						va.append(p).append(",");
 					}else if( returnType==Integer.class){
 						Integer p = (Integer)m.invoke(obj);
-						if(p!=null) va.append(p+",");
+						if(p!=null) va.append(p).append(",");
 					}else if( returnType==Date.class){
 						Date p = (Date)m.invoke(obj);
-						StringBuffer pp = new StringBuffer(p.toLocaleString());
-						if(p!=null) va.append("'"+pp.delete(pp.length()-9,pp.length())+"',");
+						StringBuilder pp = new StringBuilder(new SimpleDateFormat().format(p));
+						va.append("'").append(pp.delete(pp.length() - 9, pp.length())).append("',");
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -99,7 +100,7 @@ public class ORM {
 	 * @return Object 对象
 	 */
 	public static List FindByProperty(String className,String property,String value){
-		Object obj = null;
+		Object obj;
 		List list = new ArrayList();
 		String tableName = className.split("\\.")[className.split("\\.").length-1];
 //		System.out.println("表名 : "+tableName);
@@ -112,19 +113,20 @@ public class ORM {
 		}
 		
 		//拼接SQL语句
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("select * from ").append(tableName).append(" where ")
 		.append(property).append("=");
-		
+
+		assert class1 != null;
 		Field[] fs = class1.getDeclaredFields();
-		for(int i=0;i<fs.length;i++){
-			if(property.equals(fs[i].getName())){
+		for (Field f : fs) {
+			if (property.equals(f.getName())) {
 				try {
 					//fs[i].get(obj);
-					Type types = fs[i].getGenericType();
-					if(types == int.class || types == long.class || types == Integer.class){
+					Type types = f.getGenericType();
+					if (types == int.class || types == long.class || types == Integer.class) {
 						sb.append("").append(value).append("");
-					}else{
+					} else {
 						sb.append("'").append(value).append("'");
 					}
 				} catch (Exception e) {
@@ -180,20 +182,21 @@ public class ORM {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
+			assert db != null;
 			db.closeAll();
 		}
 		return list;
 	}
 	/**
 	 * 获取指定的class对应的表全部的记录
-	 * @param className
+	 * @param className 类名
 	 * @return List 对象集合没有泛型
 	 */
 	public static List getRowsList(String className){
-		Object obj = null;
+		Object obj;
 		ResultSet rs = null;
 		Mysql db = null;
-		Class class1 = null;
+		Class class1;
 		List list = new ArrayList();
 		//正则来切分字符串，返回String数组，取最后一个
 		String tableName = className.split("\\.")[className.split("\\.").length-1];

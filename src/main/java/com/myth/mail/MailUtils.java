@@ -34,6 +34,7 @@ public class MailUtils {
 	 * 初始化所有配置信息,类型作为参数传入
 	 */
 	private  static void initConfig(String type){
+		// 如果是maven web项目 就要src开头的路径
 		Config config = new Config("/mails.properties");
 		SendServer=config.getString(type+"_sendServer");
 		port = config.getString(type+"_port");
