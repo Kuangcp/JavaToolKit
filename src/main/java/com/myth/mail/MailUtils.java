@@ -14,8 +14,7 @@ import java.util.Properties;
 
 /**
  * 使用QQ邮箱或者是163邮箱进行发送(html )注册地址
- * @author Myth
- * 2017年1月1日 下午7:57:32
+ * @author Myth on 2017年1月1日 下午7:57:32
  * 2017-05-04 10:20:33 ：
  * 	最好使用redis来存储配置信息，用户名密码什么的，这样开源也不会泄露密码
  * 	2017-05-08 20:16:00
@@ -27,7 +26,7 @@ public class MailUtils {
 	private static String username;
 	private static String passcode;
 	private static String title;
-	private static String contents="";
+	private static String contents;
 	private static String Receiver;
 
 	/**
@@ -109,7 +108,7 @@ public class MailUtils {
 				return new PasswordAuthentication(username, passcode);// 邮箱和第三方登录授权码
 			}
 		});
-		createMessage(session,username,receiver,title,contents);
+		createMessage(session);
 	}
 	/**
 	 * 使用163邮箱或者126来发送
@@ -130,16 +129,16 @@ public class MailUtils {
 				return new PasswordAuthentication(username, passcode);// 邮箱和第三方登录授权码
 			}
 		});
-		createMessage(session,username,receiver,title,contents);
+		createMessage(session);
 	}
 	/**
 	 * 验证Session，进行发送信息
 	 */
-	private static void createMessage(Session session,String username,String receiver,String title,String contents){
+	private static void createMessage(Session session){
 		Message message = new MimeMessage(session);// 2， 创建代表邮件的对象Message
 		try {
 			message.setFrom(new InternetAddress(username));// 设置发件人
-			message.addRecipient(RecipientType.TO, new InternetAddress(receiver));			// 设置收件人
+			message.addRecipient(RecipientType.TO, new InternetAddress(Receiver));			// 设置收件人
 			message.setSubject(title);// 设置标题
 			message.setSentDate(new Date());// 设置发送时间
 			// 设置正文(有链接选择text/html;charset=utf-8)
