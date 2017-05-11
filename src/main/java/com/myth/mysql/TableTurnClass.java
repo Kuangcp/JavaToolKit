@@ -4,19 +4,13 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
- * @author  Myth
- * @date 2016年8月5日 下午8:15:01
- *  从数据库的表里，生成指定路径下类文件
+ * @author  Myth on  2016年8月5日 下午8:15:01
+ *  从数据库的表里，生成指定路径下类文件，现在基本用不上了，新建实体类，然后使用jpa的update就会自动建表了
  */
 public class TableTurnClass{
 	private static String FileName="";
@@ -26,11 +20,10 @@ public class TableTurnClass{
 	private PreparedStatement ps = null;
 	private Connection cn = null;
 	private ResultSet rs = null;
-	static List<String> codes = null;
-	static List<table> tableInfo = null;
-	static String packageName;
-	static String filePath;
-	static Map <String,String>FieldType;
+	private static List<String> codes = null;
+	private static List<Table> tableInfo = null;
+	private static String packageName;
+	private static String filePath;
 
 	/**
 	 * 创建某数据库下一个指定表或视图
@@ -42,7 +35,7 @@ public class TableTurnClass{
 	 * @param ta 指定表
 	 * @param console 是否控制台输出
 	 */
-	public static void CreateOneTable(String filePaths,String packages,String db,String user,String pass,String ta,boolean console){
+	public static void createOneTable(String filePaths,String packages,String db,String user,String pass,String ta,boolean console){
 		boolean flag = true;
 		try{
 			filePath = filePaths;
@@ -64,7 +57,7 @@ public class TableTurnClass{
 		}
 		if(flag)System.out.println("创建成功");
 	}
-	
+
 	/**
 	 * 创建某数据库下所有表和视图
 	 * @param filePaths 真正的路径 .分隔，根目录为src
@@ -74,19 +67,20 @@ public class TableTurnClass{
 	 * @param pa 密码
 	 * @param console 是否控制台输出
 	 */
-	public static void CreateAllTable(String filePaths,String packages,String db,String us,String pa,boolean console){
+	public static void createAllTableFromCurrentDatabase(String filePaths,String packages,String db,String us,String pa,boolean console){
 		boolean flag = true;
 		try{
 			filePath = filePaths;
 			packageName = packages;
 			TableTurnClass test = new TableTurnClass(db,us,pa);
 			List<String>tables = test.getTables();
-			for(int i=0;i<tables.size();i++){
-				table = tables.get(i);//获取表名
+			assert tables != null;
+			for (String table1 : tables) {
+				table = table1;//获取表名
 				FileName = GetFileName(table);
 				tableInfo = getTableList();
 				codes = CreateCode(tableInfo);
-				if(console){
+				if (console) {
 					//控制台输出
 					Display(tableInfo);
 					DisPlayList(codes);
@@ -100,34 +94,7 @@ public class TableTurnClass{
 		}
 		if(flag)System.out.println("创建成功");
 	}
-	/**
-	 * 配置好包名，数据库参数就可以用了
-	 */
-	public static void main(String []d){
 
-		//测试startwith函数
-		String ff = "Varchar";
-		System.out.println(ff.startsWith("varchar"));
-
-		
-		CreateOneTable("com.myth.mysql","com.myth.mysql", "ebook", "root", "123456", "book_type",true);
-		
-		//手动输入单表，来测试
-/*		new TableTurnClass("ebook","root","123456","book_type");
-		packageName = "vn";
-//		smalltable = table;
-		table = table.substring(0,1).toUpperCase()+table.substring(1,table.length());
-		tableInfo = getTableList();
-		Display(tableInfo);//未转，是Mysql的数据类型
-		codes = CreateCode(tableInfo);
-		System.out.println("————————————————————————————————————————");
-		Display(tableInfo);//转后，是Java数据类型
-		
-		DisPlayList(codes);*/
-//		CreateClass();
-		
-		//CreateXml(tableInfo); 
-	}
 	/**构造器，只是初始化参数值*/
 	private TableTurnClass(String db,String id,String pa){
 		database = db;
@@ -163,9 +130,9 @@ public class TableTurnClass{
 			out = new FileOutputStream("./src/"+packages+"/"+fileName);
 			os = new OutputStreamWriter(out);
 			bw = new BufferedWriter(os);
-			
-			for(int i=0;i<file.size();i++){
-				bw.write(file.get(i));
+
+			for (String aFile : file) {
+				bw.write(aFile);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -183,17 +150,17 @@ public class TableTurnClass{
 	}
 	/**
 	 * 获取数据库下所有表的元数据信息
-	 * @return
+	 * @return List<Table对象>
 	 */
-	private static List<table> getTableList(){
+	private static List<Table> getTableList(){
 		TableTurnClass r = new TableTurnClass(database,user,pass,table);
-		List<table> tables = new ArrayList<table>();
+		List<Table> tables = new ArrayList<>();
 		ResultSet rs = r.SelectAll("desc "+table);
-		
+
 		try {
 			while(rs.next()){
 				//System.out.println(rs.getString(1));
-				table tb = new table(rs.getString(1),rs.getString(2));
+				Table tb = new Table(rs.getString(1),rs.getString(2));
 				tables.add(tb);
 			}
 		} catch (SQLException e) {
@@ -208,63 +175,65 @@ public class TableTurnClass{
 	}
 	/**
 	 * 生成代码
-	 * @param T 表的集合，名称和数据类型
+	 * @param tableInfo 表的集合，名称和数据类型
 	 * @return 当前表对应的持久类所有代码的集合
 	 */
-	private static List<String> CreateCode(List<table>T){
-		int LENGTH = T.size();
-		List<String>codesList = new ArrayList<String>();
+	private static List<String> CreateCode(List<Table> tableInfo){
+		int LENGTH = tableInfo.size();
+		List<String>codesList = new ArrayList<>();
 		codesList.add("package "+packageName+";\n\n");
 		codesList.add("public class "+FileName+" {\n");
 		/* 成员属性*/
-		for(int i=0;i<LENGTH;i++){
-			String types = "";
-			String type = T.get(i).type;
-			String name = T.get(i).name;
-			
-			types = TurnType(type);//类型转换
-			
-			T.get(i).type = types;
-			codesList.add("    private "+types+" "+name+";\n");
+		for (Table aTableInfo : tableInfo) {
+			String type = aTableInfo.type;
+			String name = aTableInfo.name;
+			String types = TurnType(type);//类型转换
+
+			aTableInfo.type = types;
+			codesList.add("    private " + types + " " + name + ";\n");
 		}
 		codesList.add("\n");
 		/*
 			构造器
 		 */
 		codesList.add("    public "+FileName+"(){}\n");
-		String Method="    public "+FileName+"(";
+		StringBuilder Method= new StringBuilder("    public " + FileName + "(");
 		boolean flag = true,flag2=true;
-		for(int i=0;i<LENGTH;i++){
-			flag2=true;
-			Method+=T.get(i).type+" "+T.get(i).name+", ";
-			if(Method.length()>80 && flag) {Method+="\n            ";flag=false;flag2=false;}
+		for (Table aTableInfo : tableInfo) {
+			flag2 = true;
+			Method.append(aTableInfo.type).append(" ").append(aTableInfo.name).append(", ");
+			if (Method.length() > 80 && flag) {
+				Method.append("\n            ");
+				flag = false;
+				flag2 = false;
+			}
 		}
-		Method = Method.substring(0,Method.length()-2);
-		if(!flag2) Method = Method.substring(0,Method.length()-13);
-		Method +="){";
-		for(int i=0;i<LENGTH;i++){
-			Method+="\n        this."+T.get(i).name+" = "+T.get(i).name+";";
+		Method = new StringBuilder(Method.substring(0, Method.length() - 2));
+		if(!flag2) Method = new StringBuilder(Method.substring(0, Method.length() - 13));
+		Method.append("){");
+		for (Table aTableInfo : tableInfo) {
+			Method.append("\n        this.").append(aTableInfo.name).append(" = ").append(aTableInfo.name).append(";");
 		}
-		Method+="\n    }\n";
-		codesList.add(Method);
+		Method.append("\n    }\n");
+		codesList.add(Method.toString());
 		codesList.add("\n");
 		/*
 		 生成SetGet方法
 		 */
-		for(int i=0;i<LENGTH;i++){
-			String types = T.get(i).type;
-			String name = T.get(i).name;
+		for (Table aTableInfo : tableInfo) {
+			String types = aTableInfo.type;
+			String name = aTableInfo.name;
 			//属性名首字母大写
-			String Name = T.get(i).name.substring(0,1).toUpperCase()+T.get(i).name.substring(1,T.get(i).name.length());
-			codesList.add("    public "+types+" get"+Name+"(){\n        return "+name+";\n    }\n");
-			codesList.add("    public void set"+Name+"("+types+" "+name+"){\n       this."+name+" = "+name+";\n    }\n");
+			String Name = aTableInfo.name.substring(0, 1).toUpperCase() + aTableInfo.name.substring(1, aTableInfo.name.length());
+			codesList.add("    public " + types + " get" + Name + "(){\n        return " + name + ";\n    }\n");
+			codesList.add("    public void set" + Name + "(" + types + " " + name + "){\n       this." + name + " = " + name + ";\n    }\n");
 		}
 		/*
 			toString方法
 		 */
 		codesList.add("    @Override\n    public String toString(){\n        return \""+FileName+"{\"+\n        \"");
 		for(int i=0;i<LENGTH;i++){
-			String name = T.get(i).name;
+			String name = tableInfo.get(i).name;
 			if(i!=(LENGTH-1))codesList.add(name+"=\"+"+name+"+\n        \",");
 			else codesList.add(name+"=\"+"+name+"+\"}\";\n");
 		}
@@ -289,32 +258,31 @@ public class TableTurnClass{
 		}else if(type.startsWith("date") || type.startsWith("time")){
 			type="java.util.Date";
 		}
-		
+
 		return type;
 	}
 	/*
 		对数据库表名进行处理
 	 */
 	private static String GetFileName(String table){
-		String name = "";
+		StringBuilder name = new StringBuilder();
 		String [] names = table.split("_");
 		//table = table.substring(0,1).toUpperCase()+table.substring(1,table.length());
-		if(names==null || names.length==1){
-			name = table.substring(0,1).toUpperCase()+table.substring(1,table.length());
+		if(names.length == 1){
+			name = new StringBuilder(table.substring(0, 1).toUpperCase() + table.substring(1, table.length()));
 		}else{
-
 			for(String word:names){
-				name += word.substring(0,1).toUpperCase()+word.substring(1,word.length());
+				name.append(word.substring(0, 1).toUpperCase()).append(word.substring(1, word.length()));
 			}
 		}
-		return name;
+		return name.toString();
 	}
 	private ResultSet SelectAll(String sql){
 		try {
 			Class.forName(Driver);
 			cn = DriverManager.getConnection(URL);
 			ps=cn.prepareStatement(sql);
-			
+
 			rs=ps.executeQuery();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -336,7 +304,7 @@ public class TableTurnClass{
 	 * @return 表名集合
 	 */
 	private List<String> getTables(){
-		List<String>tables = new ArrayList<String>();
+		List<String>tables = new ArrayList<>();
 		try {
 			Class.forName(Driver);
 			cn = DriverManager.getConnection(URL);
@@ -354,15 +322,15 @@ public class TableTurnClass{
 		return tables;
 	}
 	/**控制台输出表的元数据*/
-	private static void Display(List<table> h){
-		for (int i=0;i<h.size();i++){
-			System.out.println(h.get(i).toString());
+	private static void Display(List<Table> tableMeta){
+		for (Table aH : tableMeta) {
+			System.out.println(aH.toString());
 		}
 	}
 	/**控制台输出最终代码集*/
 	private static void DisPlayList(List<String> lists){
-		for(int i=0;i<lists.size();i++){
-			System.out.print(lists.get(i));
+		for (String list : lists) {
+			System.out.print(list);
 		}
 	}
 }

@@ -10,14 +10,17 @@ public class Config {
 
 	private Properties cfg = new Properties();
 
-    // maven 结构 resources下的a.yml : /a.yml
+	// maven 结构 resources下的a.yml : /a.yml
 	public Config(String path){
 		try {
 			InputStream is = this.getClass().getResourceAsStream(path);
 			cfg.load(is);
+			// 使用maven web模板创建的项目这样写也能这样填路径 /a.yml
+			// File file = new File(HttpInfo.CONFIG_URL+path);
+			// cfg.load(New FileInputStream(file));
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e); 
+			throw new RuntimeException(e);
 		}
 	}
 	public String getString (String key){

@@ -8,80 +8,85 @@ import java.util.List;
 
 /**
  * 切记要导JAR驱动包，还有配置好URL
- * @author Myth
- * @date 2016年7月24日
+ * @author Myth on 2016年7月24日
  */
-public class Mysql {
-	/**
-	 * 封装的函数：
-	 * 		查询返回rs
-	 * 		查询返回List
-	 * 		增删改 返回boolean
-	 *		事务性批量插入数据 返回boolean
-	 */
+public class Mysql implements DataBaseAction{
 	private static int count = 0;
 	private PreparedStatement ps = null;
 	private Connection cn = null;
 	private ResultSet rs = null;
 	private String Driver;
-	private String URL;
+	private StringBuilder URL=new StringBuilder();
+	private String username;
+	private String password;
+	private String database;
+	private String port;
 
 	/**
-	 * 连接本地数据库的方法
-	 * @param db 数据库
-	 * @param user 用户
-	 * @param pass 密码
+	 * 手动设置链接数据的属性
+	 * @param database 数据库
+	 * @param username 用户
+	 * @param port 端口号
+	 * @param password 密码
 	 */
-	public Mysql(String db,String user,String pass){
-		Driver = "com.mysql.jdbc.Driver";
-		URL="jdbc:mysql://localhost:3306/"+db+"?user="+user+"&password="+pass+"&userUnicode=true&characterEncoding=UTF8";
+	public Mysql(String database,String port,String username,String password){
+		Config con = new Config("/mysql.properties");
+		this.Driver = con.getString("Driver");
+		this.URL.append("jdbc:mysql://localhost:").append(port).append("/").append(database).append("?user=")
+				.append(username).append("&password=").append(password).append("&userUnicode=true&characterEncoding=UTF8");
+//		this.URL="jdbc:mysql://localhost:3306/"+db+"?user="+user+"&password="+pass+"&userUnicode=true&characterEncoding=UTF8";
 	}
 	/**
-	 * 默认是从文件中读取 
+	 * 采用配置文件的默认配置
 	 */
 	public Mysql(){
-		Config con = new Config("mysql.properties");
+		Config con = new Config("/mysql.properties");
 		this.Driver = con.getString("Driver");
-		this.URL = con.getString("URL");
+		database = con.getString("database");
+		username = con.getString("username");
+		password = con.getString("password");
+		port = con.getString("port");
+		this.URL.append("jdbc:mysql://localhost:").append(port).append("/").append(database).append("?user=")
+				.append(username).append("&password=").append(password).append("&userUnicode=true&characterEncoding=UTF8");
 	}
 	/**获取数据库连接*/
 	public Connection getConnection(){
 		try {
 			Class.forName(Driver);
-			cn = DriverManager.getConnection(URL);
+			cn = DriverManager.getConnection(URL.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("获取连接，异常！");
 		}
 		return cn;
 	}
-	
-/**查询全部的操作 返回值是ResultSet 切记使用完后要finally关闭*/
-	public ResultSet SelectAll(String sql){
+
+	/**查询全部的操作 返回值是ResultSet 切记使用完后要finally关闭*/
+	public ResultSet queryBySQL(String sql){
 		count++;
 		try {
-			Class.forName(Driver);
-			cn = DriverManager.getConnection(URL);
+			cn = getConnection();
 			ps=cn.prepareStatement(sql);
-			
 			rs=ps.executeQuery();
 		} catch (Exception e) {
-		}finally {
-			//不能关闭
-//			this.closeAll();
+			e.printStackTrace();
 		}
-		System.out.println("做了"+count+"次查询操作");
+//		finally {
+		//不能关闭
+//			this.closeAll();
+//		}
+		System.out.println("这是第"+count+"次查询操作");
 		return rs;
 	}
 	/**
 	 * SQL查询并返回List集合
-	 * @param sql
-	 * @return List<String[]> 一行是一个String[] 按查询的字段顺序
+	 * @param sql SQL 语句
+	 * @return List String数组 一行是一个String[] 按查询的字段顺序
 	 */
-	public List<String []> SelectReturnList(String sql){
+	public List<String []> queryReturnList(String sql){
 		int Cols;
-		List <String []> data = new ArrayList<String [] >();
-		ResultSet rs = SelectAll(sql);
+		List <String []> data = new ArrayList<>();
+		ResultSet rs = queryBySQL(sql);
 		try {
 			Cols = rs.getMetaData().getColumnCount();//获取总列数
 			while(rs.next()){
@@ -99,15 +104,16 @@ public class Mysql {
 		}
 		return data;
 	}
-/**把增删改 合在一起 返回值是 布尔值 
- * 各种连接已经关闭了不用再次关闭了
- * SQL只能输一句，不能多句运行
- */
-	public boolean updSQL(String sql){
+	/**把增删改 合在一起 返回值是 布尔值
+	 * 各种连接已经关闭了不用再次关闭了
+	 * SQL只能输一句，不能多句运行
+	 * @param sql 执行的SQL
+	 * @return boolean 是否执行成功
+	 */
+	public boolean executeUpdateSQL(String sql){
 		boolean flag = true;
 		try{
-			Class.forName(Driver);
-			cn = DriverManager.getConnection(URL);
+			cn = getConnection();
 			ps=cn.prepareStatement(sql);
 			int i=ps.executeUpdate();
 			System.out.print("    增删改查成功_"+i+"_行受影响-->");
@@ -123,12 +129,16 @@ public class Mysql {
 		}
 		return flag;
 	}
-	/**参数是SQL语句数组，插入多条数据并采用了事务*/
-	public boolean BatchInsertOfAffair(String [] sqls){
+	/**
+	 * 插入多条数据并采用了事务
+	 * @param sqls SQL的String数组
+	 * @return boolean 是否成功
+	 * */
+	public boolean batchInsertWithAffair(String [] sqls){
 		boolean success = true;
 		try{
 			Class.forName(Driver);
-			cn = DriverManager.getConnection(URL);
+			cn = DriverManager.getConnection(URL.toString());
 			cn.setAutoCommit(false);//取消自动提交
 			int i=0;
 			for (String sql:sqls){
@@ -164,8 +174,9 @@ public class Mysql {
 			if(rs!=null) rs.close();
 			if(ps!=null) ps.close();
 			if(cn!=null) cn.close();
-		} catch (SQLException e) { 
+		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("资源关闭异常");
 		}
 		System.out.println("正常-关闭资源");
 	}

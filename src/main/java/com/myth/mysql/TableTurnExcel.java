@@ -3,6 +3,7 @@ package com.myth.mysql;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.hssf.util.Region;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.io.*;
 import java.sql.ResultSet;
@@ -12,8 +13,7 @@ import java.util.List;
 
 /**
  * 将指定的SQL语句的结果集生成一个Excel单Sheet文件
- * @author  Myth
- * @date 2016年8月25日 下午11:06:57
+ * @author  Myth on  2016年8月25日 下午11:06:57
  *
  */
 public class TableTurnExcel {
@@ -21,16 +21,12 @@ public class TableTurnExcel {
 	private List<String []> tables;
 	private int RowNum;
 	private int ColNum;
-//	private String SheetName;
+	//	private String SheetName;
 //	private String path;
 	private HSSFWorkbook wb;
 	private HSSFCellStyle titleStyle;
 	private HSSFCellStyle contentStyle;
-	/**
-	 * 
-	 * @param sql 需要查询的SQL语句
-	 * @param title Excel表格的标题
-	 */
+
 	{
 		//创建工作薄
 		wb = new HSSFWorkbook();
@@ -46,40 +42,39 @@ public class TableTurnExcel {
 	 * @param sheetName String Sheet名字
 	 * @param Path String 生成文件的目的路径
 	 */
-	public static void Run(String sql,String title,String sheetName,String Path){
+	public static void createSingleExcel(String sql,String title,String sheetName,String Path){
 		TableTurnExcel te = new TableTurnExcel();
-		
-		te.WriteExcelSheet(title,sql,sheetName);
-		te.CreateFile(te.wb, Path);
-		
+		te.pushSheetToExcelBySQL(title,sql,sheetName);
+		te.createExcelFile(te.wb, Path);
+
 	}
 	/**
-	 * 生成多Sheet 的表格文件 
+	 * 生成多Sheet 的表格文件
 	 * @param sql String[] 查询的SQL
 	 * @param title String[] 标题
 	 * @param sheetName String[] Sheet名字
 	 * @param Path String 生成文件的目的路径
 	 */
-	public static void Runs(String [] sql,String[] title,String[] sheetName,String Path){
+	public static void createMultiSheetExcelWithSheetName(String [] sql,String[] title,String[] sheetName,String Path){
 		TableTurnExcel tes = new TableTurnExcel();
 		for (int i=0;i<sql.length;i++){
-			tes.WriteExcelSheet(title[i], sql[i],sheetName[i]);
+			tes.pushSheetToExcelBySQL(title[i], sql[i],sheetName[i]);
 		}
-		tes.CreateFile(tes.wb, Path);
+		tes.createExcelFile(tes.wb, Path);
 	}
 	/**
 	 * 生成多个Sheet 的表格文件
 	 * 不加SheetName参数，默认是数字123
-	 * @param sql String []
-	 * @param title String []
-	 * @param Path String []
+	 * @param sql String [] 多条查询语句
+	 * @param title String [] 多个标题
+	 * @param Path String  路径
 	 */
-	public static void Runs(String [] sql,String[] title,String Path){
+	public static void createMultiSheetExcelWithoutSheetName(String [] sql,String[] title,String Path){
 		TableTurnExcel tes = new TableTurnExcel();
 		for (int i=0;i<sql.length;i++){
-			tes.WriteExcelSheet(title[i], sql[i],(i+1)+"");
+			tes.pushSheetToExcelBySQL(title[i], sql[i],(i+1)+"");
 		}
-		tes.CreateFile(tes.wb, Path);
+		tes.createExcelFile(tes.wb, Path);
 	}
 	/**
 	 * 指定列名，动态生成多个列，组合为一个表
@@ -88,21 +83,21 @@ public class TableTurnExcel {
 	 * @param title Sheet的标题
 	 * @param Path 文件生成路径
 	 */
-	public static void CreateDynamicTable(String []ColName,String sql[],String title,String Path){
+	public static void createDynamicTable(String []ColName,String sql[],String title,String Path){
 		TableTurnExcel te = new TableTurnExcel();
-		te.CreateSheet(ColName, sql, title, Path);
-		te.CreateFile(te.wb, Path);
+		te.createSheet(ColName, sql, title, Path);
+		te.createExcelFile(te.wb, Path);
 	}
 	/**
 	 * 将一个List 转换成一个xls文件
-	 * @param title
-	 * @param data
-	 * @param Path
+	 * @param title 表格标题
+	 * @param data List<String []> 表格数据
+	 * @param Path 文件路径
 	 */
-	public static void ListToExcel (String title,List<String []> data,String Path){
+	public static void listDataTurnExcelWithSingleSheet (String title,List<String []> data,String Path){
 		TableTurnExcel te = new TableTurnExcel();
-		te.ListToSheet(title, data, title);
-		te.CreateFile(te.wb, Path);
+		te.listTurnSheet(title, data, title);
+		te.createExcelFile(te.wb, Path);
 	}
 	/**
 	 * 将多个List 形式的数据转换成多Sheet
@@ -110,28 +105,20 @@ public class TableTurnExcel {
 	 * @param data List<List<String []>> 表格所有数据的集合
 	 * @param Path 路径
 	 */
-	public static void ListToExcels (String[] title,List<List<String []>> data,String Path){
+	public static void listDataTurnExcelWithMultiSheet (String[] title,List<List<String []>> data,String Path){
 		TableTurnExcel te = new TableTurnExcel();
 		for(int i=0;i<data.size();i++){
-			te.ListToSheet(title[i], data.get(i), i+"");
+			te.listTurnSheet(title[i], data.get(i), i+"");
 		}
-		te.CreateFile(te.wb, Path);
+		te.createExcelFile(te.wb, Path);
 	}
-	/**
-	 * 创建课表
-	 * @param title
-	 * @param data
-	 * @param Path
-	 */
-	public static void CreateKB(String title,List<String []> data,String Path){
-		
-	}
+
 	public static void main(String[] args) {
 		//单Sheet
 //		TableTurnExcel e = new TableTurnExcel();
 //		e.WriteExcelSheet("辅导员","select * from assitant ","1");
 //		e.CreateFile(e.wb,"F:/A.xls");
-		
+
 		//多Sheet
 		/*String [] sql,title,sheetName;
 		sql = new String [3];
@@ -147,53 +134,52 @@ public class TableTurnExcel {
 		sheetName[1]="2";
 		sheetName[2]="3";
 		String Path="F:/ASs.xls";
-		
+
 		Runs(sql, title, Path);*/
-		Mysql db = new Mysql("student","root","ad");
-		List<String[]> data = db.SelectReturnList("select * from student");
-		ResultSet rs = db.SelectAll("select * from student");
-		
+		Mysql db = new Mysql("student","3306","root","ad");
+		List<String[]> data = db.queryReturnList("select * from student");
+		ResultSet rs = db.queryBySQL("select * from student");
+
 		try {
 			String [] ti = new String[rs.getMetaData().getColumnCount()];
 			for(int i=1;i<=rs.getMetaData().getColumnCount();i++){
 //					System.out.println(rs.getMetaData().getColumnName(i));
 //				System.out.println(rs.getMetaData().getColumnLabel(i));
 //				if(i!=1 && i%2==1){
-					String name = rs.getMetaData().getColumnLabel(i);
-					ti[i-1] = name;
-					
+				String name = rs.getMetaData().getColumnLabel(i);
+				ti[i-1] = name;
+
 //					System.out.println(name);
 //				}
-				
+
 			}
 			data.add(0,ti);//加入到第一
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ListToExcel("titles", data, "F:/List.xls");
 	}
 	/**创建一个动态列的表加入到Sheet
-	 * 原理是：传入表头数组，然后同样大小的SQL数组，一条SQL得到一个列的值，进行拼接 
+	 * 原理是：传入表头数组，然后同样大小的SQL数组，一条SQL得到一个列的值，进行拼接
 	 */
-	@SuppressWarnings("deprecation")
-	private void CreateSheet(String []ColName,String sql[],String title,String Path){
+	private void createSheet(String []ColName,String sql[],String title,String Path){
 		HSSFSheet sheet = wb.createSheet(title);
 		HSSFRow row ;
 		HSSFCell cell ;
 		//得到所有数据
 		List<List<String []>> list = new ArrayList<List<String []>>();
-		Mysql db = new Mysql("student","root","ad");
+		Mysql db = new Mysql("student","3306","root","ad");
 		for (int i=0;i<sql.length;i++){
-			list.add(db.SelectReturnList(sql[i]));
+			list.add(db.queryReturnList(sql[i]));
 		}
-		//注意行和列都是数组下标格式	
-		//创建单元格合并的标题 
+		//注意行和列都是数组下标格式
+		//创建单元格合并的标题
 		row = sheet.createRow(0);
 		cell = row.createCell(0);
 		cell.setCellValue(new HSSFRichTextString(title));
+
 		cell.setCellStyle(titleStyle);
-		sheet.addMergedRegion(new Region(0,(short)0,0,(short)(ColNum-1)));//合并单元格
+		sheet.addMergedRegion(new CellRangeAddress(0,0,0,ColNum-1));//合并单元格
+//		sheet.addMergedRegion(new Region(0,(short)0,0,(short)(ColNum-1)));
 		//创建表格列头名字
 		row = sheet.createRow(1);
 		for(int i=0;i<ColName.length;i++){
@@ -212,8 +198,7 @@ public class TableTurnExcel {
 		}
 	}
 	/**可重复调用以达到在一个工作簿生成多个Sheet的目的*/
-	@SuppressWarnings("deprecation")
-	private void WriteExcelSheet(String title,String sql,String SheetName){
+	private void pushSheetToExcelBySQL(String title,String sql,String SheetName){
 		WriteDataBySql(sql);
 		//创建工作表
 		HSSFSheet sheet = wb.createSheet(SheetName);
@@ -237,12 +222,12 @@ public class TableTurnExcel {
 		}
 	}
 	/**
-	 * 
-	 * @param title
-	 * @param data
-	 * @param SheetName
+	 *
+	 * @param title 标题
+	 * @param data 数据 List String数组
+	 * @param SheetName 单个Sheet名字
 	 */
-	private void ListToSheet(String title,List<String[]> data,String SheetName){
+	private void listTurnSheet(String title,List<String[]> data,String SheetName){
 		HSSFSheet sheet = wb.createSheet(SheetName);
 		HSSFRow row ;
 		HSSFCell cell ;
@@ -270,63 +255,63 @@ public class TableTurnExcel {
 	 * @param wb 工作簿
 	 * @param path 生成文件的路径
 	 */
-	private void CreateFile(HSSFWorkbook wb,String path){
+	private void createExcelFile(HSSFWorkbook wb,String path){
 		//将工作簿写入输出流
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		try{  
-            wb.write(os);  
-        }catch(IOException e){  
-            e.printStackTrace();  
-        }  
-        byte[] xls = os.toByteArray();  
-        //将输出流输出到文件中去
-        File file = new File(path);  
-        OutputStream out = null;  
-        try {  
-             out = new FileOutputStream(file);  
-             try {  
-                out.write(xls);  
-            } catch (IOException e) {  
-                e.printStackTrace();  
-            }  
-        } catch (FileNotFoundException e1) {  
-            e1.printStackTrace();  
-        }
-        System.out.println("写入Excel成功");
+		try{
+			wb.write(os);
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		byte[] xls = os.toByteArray();
+		//将输出流输出到文件中去
+		File file = new File(path);
+		OutputStream out;
+		try {
+			out = new FileOutputStream(file);
+			try {
+				out.write(xls);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		System.out.println("写入Excel成功");
 	}
-	
+
 	/**把SQL查询结果转换成List集合,载入属性tables中*/
 	private void WriteDataBySql(String sql){
-		Mysql db = new Mysql("student","root","ad");
-		tables = db.SelectReturnList(sql);
+		Mysql db = new Mysql("student","3306","root","ad");
+		tables = db.queryReturnList(sql);
 		RowNum = tables.size();
 		ColNum = tables.get(0).length;
 		System.out.println("读取数据库并加载入List集合成功");
 	}
 	/**创建标题样式*/
 	private HSSFCellStyle createTitleStyle(HSSFWorkbook wb){
-		HSSFFont titleFont = wb.createFont();  
-		titleFont.setFontHeightInPoints((short)14);  
-		titleFont.setFontName("楷体");  
-		titleFont.setColor(HSSFColor.RED.index);  
-		titleFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD); 
-		
-        HSSFCellStyle titleStyle = wb.createCellStyle();  
-        titleStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);  
-        titleStyle.setFont(titleFont);
-        return titleStyle;
+		HSSFFont titleFont = wb.createFont();
+		titleFont.setFontHeightInPoints((short)14);
+		titleFont.setFontName("楷体");
+		titleFont.setColor(HSSFColor.RED.index);
+		titleFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+
+		HSSFCellStyle titleStyle = wb.createCellStyle();
+		titleStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		titleStyle.setFont(titleFont);
+		return titleStyle;
 	}
 	/**创建正文样式*/
 	private HSSFCellStyle createContentStyle(HSSFWorkbook wb){
-		HSSFFont contentFont = wb.createFont();  
-        contentFont.setFontHeightInPoints((short)12);  
-        contentFont.setFontName("宋体"); 
-        contentFont.setColor(HSSFColor.BLACK.index);  
-        contentFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD); 
-		
-        HSSFCellStyle contentStyle = wb.createCellStyle();  
-        contentStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);  
-        contentStyle.setFont(contentFont);
-        return contentStyle;
+		HSSFFont contentFont = wb.createFont();
+		contentFont.setFontHeightInPoints((short)12);
+		contentFont.setFontName("宋体");
+		contentFont.setColor(HSSFColor.BLACK.index);
+		contentFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+
+		HSSFCellStyle contentStyle = wb.createCellStyle();
+		contentStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		contentStyle.setFont(contentFont);
+		return contentStyle;
 	}
 }

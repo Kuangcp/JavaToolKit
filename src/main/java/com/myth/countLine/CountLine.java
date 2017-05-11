@@ -27,15 +27,15 @@ py : 0
 public class CountLine {
 	private static Map<String,Long> typeMap  = new HashMap<>();
 	private static String [] type = {
-		"java",
-		"jsp",
-		"html",
-		"bat",
-		"sql",
-		"txt",
-		"md",
-		"xml",
-		"py"
+			"java",
+			"jsp",
+			"html",
+			"bat",
+			"sql",
+			"txt",
+			"md",
+			"xml",
+			"py"
 	};
 	static{
 		for (String aType : type) {
@@ -59,17 +59,17 @@ public class CountLine {
 	 * @param path 一个文件夹的PATH
 	 */
 	private static void AllFile(String path) {
-       File file = new File(path);
-       if (!file.exists()) {
-    	   System.out.println("文件不存在");
-       }
-       if (!file.isDirectory()) {
-    	   System.out.println("路径不是目录");
-       }
-       //file是一个文件夹
-       String[] tempList = file.list();
-       File temp;
-       //遍历文件夹下所有文件
+		File file = new File(path);
+		if (!file.exists()) {
+			System.out.println("文件不存在");
+		}
+		if (!file.isDirectory()) {
+			System.out.println("路径不是目录");
+		}
+		//file是一个文件夹
+		String[] tempList = file.list();
+		File temp;
+		//遍历文件夹下所有文件
 		for (String aTempList : tempList != null ? tempList : new String[0]) {
 			//拼接好全路径
 			if (path.endsWith(File.separator)) {//如果路径是带有了系统默认的分隔符（即斜杠）就直接和文件名拼接
@@ -95,29 +95,29 @@ public class CountLine {
 				AllFile(path + "/" + aTempList);//递归进入文件夹
 			}
 		}
-	 }
+	}
 	/**
 	 * 获取某文件的所有行数
 	 * @param path 得到路径
 	 */
-	 private static int getTotalLines(String path){
-        FileReader in;
-        int totalLines = 0;
+	private static int getTotalLines(String path){
+		FileReader in;
+		int totalLines = 0;
 		try {
 			in = new FileReader(path);
 			LineNumberReader reader = new LineNumberReader(in);
-	        String strLine = reader.readLine();
-	        
-	        while (strLine != null) {
-	            totalLines++;
-	            strLine = reader.readLine();
-	        }
-	        reader.close();
-	        in.close();
-	        
+			String strLine = reader.readLine();
+
+			while (strLine != null) {
+				totalLines++;
+				strLine = reader.readLine();
+			}
+			reader.close();
+			in.close();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return totalLines;
-    }
+	}
 }
