@@ -199,7 +199,7 @@ public class TableTurnExcel {
 	}
 	/**可重复调用以达到在一个工作簿生成多个Sheet的目的*/
 	private void pushSheetToExcelBySQL(String title,String sql,String SheetName){
-		WriteDataBySql(sql);
+		writerDataBySQL(sql);
 		//创建工作表
 		HSSFSheet sheet = wb.createSheet(SheetName);
 		HSSFRow row ;
@@ -281,7 +281,7 @@ public class TableTurnExcel {
 	}
 
 	/**把SQL查询结果转换成List集合,载入属性tables中*/
-	private void WriteDataBySql(String sql){
+	private void writerDataBySQL(String sql){
 		Mysql db = new Mysql("student","3306","root","ad");
 		tables = db.queryReturnList(sql);
 		RowNum = tables.size();

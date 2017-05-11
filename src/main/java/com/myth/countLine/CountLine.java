@@ -49,16 +49,16 @@ public class CountLine {
 		Scanner sc = new Scanner(System.in);
 		String path = sc.nextLine();
 		sc.close();
-		AllFile(path);
+		allFile(path);
 		for (String aType : type) {
 			System.out.println(aType + " : " + typeMap.get(aType));
 		}
 		s.End("");
 	}
 	/**
-	 * @param path 一个文件夹的PATH
+	 * @param path 一个文件夹的PATH,递归该文件夹
 	 */
-	private static void AllFile(String path) {
+	private static void allFile(String path) {
 		File file = new File(path);
 		if (!file.exists()) {
 			System.out.println("文件不存在");
@@ -92,7 +92,7 @@ public class CountLine {
 				}
 			}
 			if (temp.isDirectory()) {
-				AllFile(path + "/" + aTempList);//递归进入文件夹
+				allFile(path + "/" + aTempList);//递归进入文件夹
 			}
 		}
 	}

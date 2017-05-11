@@ -17,10 +17,6 @@ public class Mysql implements DataBaseAction{
 	private ResultSet rs = null;
 	private String Driver;
 	private StringBuilder URL=new StringBuilder();
-	private String username;
-	private String password;
-	private String database;
-	private String port;
 
 	/**
 	 * 手动设置链接数据的属性
@@ -42,10 +38,10 @@ public class Mysql implements DataBaseAction{
 	public Mysql(){
 		Config con = new Config("/mysql.properties");
 		this.Driver = con.getString("Driver");
-		database = con.getString("database");
-		username = con.getString("username");
-		password = con.getString("password");
-		port = con.getString("port");
+		String database = con.getString("database");
+		String username = con.getString("username");
+		String password = con.getString("password");
+		String port = con.getString("port");
 		this.URL.append("jdbc:mysql://localhost:").append(port).append("/").append(database).append("?user=")
 				.append(username).append("&password=").append(password).append("&userUnicode=true&characterEncoding=UTF8");
 	}

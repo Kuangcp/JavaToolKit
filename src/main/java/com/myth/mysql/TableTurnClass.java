@@ -13,7 +13,7 @@ import java.util.List;
  *  从数据库的表里，生成指定路径下类文件，现在基本用不上了，新建实体类，然后使用jpa的update就会自动建表了
  */
 public class TableTurnClass{
-	private static String FileName="";
+	private static String fileName="";
 	private static String database="",user="",pass="",table="";
 	private static String Driver = "com.mysql.jdbc.Driver";
 	private static String URL ="";
@@ -41,15 +41,15 @@ public class TableTurnClass{
 			filePath = filePaths;
 			packageName = packages;
 			new TableTurnClass(db,user,pass,ta);//初始化对象
-			FileName = GetFileName(table);
+			fileName = getFileNameByTable(table);
 			tableInfo = getTableList();
-			codes = CreateCode(tableInfo);
+			codes = createCode(tableInfo);
 			if(console){
 				//控制台输出
-				Display(tableInfo);
-				DisPlayList(codes);
+				showTableMetaData(tableInfo);
+				showCodeList(codes);
 			}
-			CreateClass();
+			createClass();
 		}catch(Exception e ){
 			e.printStackTrace();
 			System.out.println("创建失败");
@@ -77,15 +77,15 @@ public class TableTurnClass{
 			assert tables != null;
 			for (String table1 : tables) {
 				table = table1;//获取表名
-				FileName = GetFileName(table);
+				fileName = getFileNameByTable(table);
 				tableInfo = getTableList();
-				codes = CreateCode(tableInfo);
+				codes = createCode(tableInfo);
 				if (console) {
 					//控制台输出
-					Display(tableInfo);
-					DisPlayList(codes);
+					showTableMetaData(tableInfo);
+					showCodeList(codes);
 				}
-				CreateClass();
+				createClass();
 			}
 		}catch(Exception e ){
 			e.printStackTrace();
@@ -110,10 +110,10 @@ public class TableTurnClass{
 	/*
 	 * 生成持久类
 	 */
-	private static void CreateClass(){
-		String name = FileName+".java";
-		List2File(codes, name);
-		System.out.println("转换了 "+database+" 下的 "+FileName+" 持久类成功");
+	private static void createClass(){
+		String name = fileName+".java";
+		listDataTurnFile(codes, name);
+		System.out.println("转换了 "+database+" 下的 "+fileName+" 持久类成功");
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class TableTurnClass{
 	 * @param file 代码集
 	 * @param fileName 给定生成的文件的文件名
 	 */
-	private static void List2File(List<String> file,String fileName){
+	private static void listDataTurnFile(List<String> file,String fileName){
 		BufferedWriter bw = null;
 		OutputStream out = null;
 		OutputStreamWriter os = null;
@@ -155,7 +155,7 @@ public class TableTurnClass{
 	private static List<Table> getTableList(){
 		TableTurnClass r = new TableTurnClass(database,user,pass,table);
 		List<Table> tables = new ArrayList<>();
-		ResultSet rs = r.SelectAll("desc "+table);
+		ResultSet rs = r.queryAllData("desc "+table);
 
 		try {
 			while(rs.next()){
@@ -178,16 +178,16 @@ public class TableTurnClass{
 	 * @param tableInfo 表的集合，名称和数据类型
 	 * @return 当前表对应的持久类所有代码的集合
 	 */
-	private static List<String> CreateCode(List<Table> tableInfo){
+	private static List<String> createCode(List<Table> tableInfo){
 		int LENGTH = tableInfo.size();
 		List<String>codesList = new ArrayList<>();
 		codesList.add("package "+packageName+";\n\n");
-		codesList.add("public class "+FileName+" {\n");
+		codesList.add("public class "+fileName+" {\n");
 		/* 成员属性*/
 		for (Table aTableInfo : tableInfo) {
 			String type = aTableInfo.type;
 			String name = aTableInfo.name;
-			String types = TurnType(type);//类型转换
+			String types = turnTypeToJavaByMysql(type);//类型转换
 
 			aTableInfo.type = types;
 			codesList.add("    private " + types + " " + name + ";\n");
@@ -196,8 +196,8 @@ public class TableTurnClass{
 		/*
 			构造器
 		 */
-		codesList.add("    public "+FileName+"(){}\n");
-		StringBuilder Method= new StringBuilder("    public " + FileName + "(");
+		codesList.add("    public "+fileName+"(){}\n");
+		StringBuilder Method= new StringBuilder("    public " + fileName + "(");
 		boolean flag = true,flag2=true;
 		for (Table aTableInfo : tableInfo) {
 			flag2 = true;
@@ -231,7 +231,7 @@ public class TableTurnClass{
 		/*
 			toString方法
 		 */
-		codesList.add("    @Override\n    public String toString(){\n        return \""+FileName+"{\"+\n        \"");
+		codesList.add("    @Override\n    public String toString(){\n        return \""+fileName+"{\"+\n        \"");
 		for(int i=0;i<LENGTH;i++){
 			String name = tableInfo.get(i).name;
 			if(i!=(LENGTH-1))codesList.add(name+"=\"+"+name+"+\n        \",");
@@ -242,7 +242,7 @@ public class TableTurnClass{
 		return codesList;
 	}
 	/**将Mysql的数据类型转换成Java数据类型*/
-	private static String TurnType(String type){
+	private static String turnTypeToJavaByMysql(String type){
 		if(type.startsWith("int") || type.startsWith("smallint") || type.startsWith("tinyint")){
 			type="int";
 		}else if(type.startsWith("char") || type.startsWith("varchar") || type.endsWith("text")){
@@ -264,7 +264,7 @@ public class TableTurnClass{
 	/*
 		对数据库表名进行处理
 	 */
-	private static String GetFileName(String table){
+	private static String getFileNameByTable(String table){
 		StringBuilder name = new StringBuilder();
 		String [] names = table.split("_");
 		//table = table.substring(0,1).toUpperCase()+table.substring(1,table.length());
@@ -277,7 +277,7 @@ public class TableTurnClass{
 		}
 		return name.toString();
 	}
-	private ResultSet SelectAll(String sql){
+	private ResultSet queryAllData(String sql){
 		try {
 			Class.forName(Driver);
 			cn = DriverManager.getConnection(URL);
@@ -322,13 +322,13 @@ public class TableTurnClass{
 		return tables;
 	}
 	/**控制台输出表的元数据*/
-	private static void Display(List<Table> tableMeta){
+	private static void showTableMetaData(List<Table> tableMeta){
 		for (Table aH : tableMeta) {
 			System.out.println(aH.toString());
 		}
 	}
 	/**控制台输出最终代码集*/
-	private static void DisPlayList(List<String> lists){
+	private static void showCodeList(List<String> lists){
 		for (String list : lists) {
 			System.out.print(list);
 		}

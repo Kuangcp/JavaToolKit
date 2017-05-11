@@ -35,7 +35,7 @@ public class PoZip {
 //		CompressUtil.unzip("F:\\Tool\\ui.zip", "F:\\Tool\\ui", "12");
 
 		// 写文件
-		LibsPlus( "F:\\Tool\\code3.txt",  "F:\\Tool\\code4.txt");
+		plusLibLengthByFile( "F:\\Tool\\code3.txt",  "F:\\Tool\\code4.txt");
 	}
 	/**读取文件*/
 	public static void readfile (String filename){
@@ -108,7 +108,7 @@ public class PoZip {
 		}
 	}
 	/**运行*/
-	public static void Rush(List<String>Lib){
+	public static void startSearchPassword(List<String>Lib){
 		boolean flag = true;
 		int size = Lib.size();
 		int index = 0;
@@ -131,7 +131,7 @@ public class PoZip {
 	}
 
 	/**将传进来的库扩充一个长度*/
-	public static List<String> LibsPlus(List<String> lib){
+	public static List<String> plusLibLength(List<String> lib){
 		List<String> result = new ArrayList<String>();
 
 		for (String temp : Codes) {
@@ -143,7 +143,7 @@ public class PoZip {
 	}
 	/**将传进来的库扩充一个长度,使用文件操作
 	 */
-	public static void LibsPlus(String from,String to) throws Exception{
+	public static void plusLibLengthByFile(String from,String to) throws Exception{
 		File file = new File(from);
 		BufferedReader reader = null;
 		reader = new BufferedReader(new FileReader(file));

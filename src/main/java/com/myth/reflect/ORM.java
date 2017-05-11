@@ -14,21 +14,11 @@ import java.util.List;
 /**
  * 实现了一个查询记录，插入记录 
  *
- * @author  Myth By 2016年9月10日 下午8:20:12
+ * @author  Myth On 2016年9月10日 下午8:20:12
  *  实现了ORM类似操作
  */
 public class ORM {
-//	public static void main(String[] args) {
 
-	//路径的正则：
-//		String name = ORM.class.getName();//获取类的路径
-//		System.out.println(name.split("\\.")[name.split("\\.").length-1]);//使用正则表达式，来截取字符串，获得类名(最后一个串) 把包名去掉
-
-//		Student student= (Student)ORM.QueryOneObject(Student.class.getName(), "sno", "12",true);
-//		System.out.println("sno : "+student.toString());
-//		boolean flag = Insert(new Student("pass", "name", "sex", new java.util.Date(), "sid", "3", "sp", "add", "info"));
-//		System.out.println(flag);
-//	}
 	/**
 	 * 将输入对象转换成SQL语句
 	 * 不能有除了属性的get方法之外的get方法，不然这里的SQL拼接会失败
@@ -38,17 +28,13 @@ public class ORM {
 	 */
 	public static boolean save(Object obj){
 		Class class1 = obj.getClass();
-		//使用StringBuffer的原因是为了多线程的安全，一个类似于String 字符串缓冲区，但不能修改
 		StringBuilder sb = new StringBuilder("insert into ");
 		StringBuilder va = new StringBuilder("values(");
 
 		Method [] ms = class1.getMethods();
 		String className = class1.getName();
-//		System.out.println("类名称 : "+className);
-
 		//通过正则表达式来截取类名，赋值给表名
 		String tableName = className.split("\\.")[className.split("\\.").length-1];
-//		System.out.println("表名 : "+tableName);
 		sb.append(tableName).append(" (");
 
 		for(Method m:ms){
@@ -71,7 +57,7 @@ public class ORM {
 						if(p!=null) va.append(p).append(",");
 					}else if( returnType==Date.class){
 						Date p = (Date)m.invoke(obj);
-						StringBuilder pp = new StringBuilder(new SimpleDateFormat().format(p));
+						StringBuilder pp = new StringBuilder(new SimpleDateFormat("YYYY-MM-dd HH:MM:SS").format(p));
 						va.append("'").append(pp.delete(pp.length() - 9, pp.length())).append("',");
 					}
 				} catch (Exception e) {
@@ -84,11 +70,12 @@ public class ORM {
 		sb.append(")");
 		va.append(")");
 
-
 		String sql = sb.toString()+va.toString();
-		System.out.println("插入的sql是:"+sql);
-		Mysql db = new Mysql();
-		return db.executeUpdateSQL(sql);
+		System.out.println("保存对象的sql是:"+sql);
+		return new Mysql().executeUpdateSQL(sql);
+	}
+	public void invokeValueByMethod(){
+
 	}
 	/**
 	 * 根据类名字和一个属性名和值，来查询获取一行或多行记录对应的对象

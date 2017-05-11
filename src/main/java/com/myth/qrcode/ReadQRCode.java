@@ -19,10 +19,10 @@ import java.util.HashMap;
 public class ReadQRCode {
 
 	public static void main(String[] args) {
-		ReadQRCode.ReadQRCodeFromFile("D:/img1.png");
+		ReadQRCode.readQRCodeFromFile("D:/img1.png");
 	}
 	@SuppressWarnings("unchecked")
-	public static void ReadQRCodeFromFile(String path){
+	public static void readQRCodeFromFile(String path){
 		try {
 			MultiFormatReader formatReader = new MultiFormatReader();
 			File file = new File(path);
