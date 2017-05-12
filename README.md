@@ -5,7 +5,7 @@
 
 ## 这是一个使用maven构建的常用工具项目，使用该JAR包有详细的doc规范提示
 
-### [com.myth.countLine](https://github.com/Kuangcp/JavaToolKit/tree/master/src/main/java/com/myth/countLine)
+### [com.myth.countfileline](https://github.com/Kuangcp/JavaToolKit/tree/master/src/main/java/com/myth/countfileline)
 -  检索记录某文件夹下各种代码文件行数，相对于Python效率比较低
 
 ### [com.myth.file](https://github.com/Kuangcp/JavaToolKit/tree/master/src/main/java/com/myth/file)
