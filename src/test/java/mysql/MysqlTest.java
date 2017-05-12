@@ -1,6 +1,5 @@
 package mysql;
 
-import com.myth.mysql.Mysql;
 import org.junit.Test;
 
 /**
@@ -10,9 +9,9 @@ import org.junit.Test;
 public class MysqlTest {
     @Test
     public void testRun(){
-        Mysql mysql = new Mysql();
-        assert( mysql.getConnection()!=null);
-        mysql = new Mysql("jadmin","3306","root","mysql1104");
-        assert(mysql.getConnection()!=null);
+//        Mysql mysql = new Mysql();
+//        assert( mysql.getConnection()!=null);
+//        mysql = new Mysql("jadmin","3306","root","mysql1104");
+//        assert(mysql.getConnection()!=null);
     }
 }

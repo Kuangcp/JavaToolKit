@@ -185,11 +185,11 @@ public class TableTurnClass{
 		codesList.add("public class "+fileName+" {\n");
 		/* 成员属性*/
 		for (Table aTableInfo : tableInfo) {
-			String type = aTableInfo.type;
-			String name = aTableInfo.name;
+			String type = aTableInfo.getType();
+			String name = aTableInfo.getName();
 			String types = turnTypeToJavaByMysql(type);//类型转换
 
-			aTableInfo.type = types;
+			aTableInfo.setType(types);
 			codesList.add("    private " + types + " " + name + ";\n");
 		}
 		codesList.add("\n");
@@ -201,7 +201,7 @@ public class TableTurnClass{
 		boolean flag = true,flag2=true;
 		for (Table aTableInfo : tableInfo) {
 			flag2 = true;
-			Method.append(aTableInfo.type).append(" ").append(aTableInfo.name).append(", ");
+			Method.append(aTableInfo.getType()).append(" ").append(aTableInfo.getName()).append(", ");
 			if (Method.length() > 80 && flag) {
 				Method.append("\n            ");
 				flag = false;
@@ -212,7 +212,7 @@ public class TableTurnClass{
 		if(!flag2) Method = new StringBuilder(Method.substring(0, Method.length() - 13));
 		Method.append("){");
 		for (Table aTableInfo : tableInfo) {
-			Method.append("\n        this.").append(aTableInfo.name).append(" = ").append(aTableInfo.name).append(";");
+			Method.append("\n        this.").append(aTableInfo.getName()).append(" = ").append(aTableInfo.getName()).append(";");
 		}
 		Method.append("\n    }\n");
 		codesList.add(Method.toString());
@@ -221,10 +221,10 @@ public class TableTurnClass{
 		 生成SetGet方法
 		 */
 		for (Table aTableInfo : tableInfo) {
-			String types = aTableInfo.type;
-			String name = aTableInfo.name;
+			String types = aTableInfo.getType();
+			String name = aTableInfo.getName();
 			//属性名首字母大写
-			String Name = aTableInfo.name.substring(0, 1).toUpperCase() + aTableInfo.name.substring(1, aTableInfo.name.length());
+			String Name = aTableInfo.getName().substring(0, 1).toUpperCase() + aTableInfo.getName().substring(1, aTableInfo.getName().length());
 			codesList.add("    public " + types + " get" + Name + "(){\n        return " + name + ";\n    }\n");
 			codesList.add("    public void set" + Name + "(" + types + " " + name + "){\n       this." + name + " = " + name + ";\n    }\n");
 		}
@@ -233,7 +233,7 @@ public class TableTurnClass{
 		 */
 		codesList.add("    @Override\n    public String toString(){\n        return \""+fileName+"{\"+\n        \"");
 		for(int i=0;i<LENGTH;i++){
-			String name = tableInfo.get(i).name;
+			String name = tableInfo.get(i).getName();
 			if(i!=(LENGTH-1))codesList.add(name+"=\"+"+name+"+\n        \",");
 			else codesList.add(name+"=\"+"+name+"+\"}\";\n");
 		}

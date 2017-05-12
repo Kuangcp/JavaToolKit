@@ -1,4 +1,4 @@
-package com.myth.countLine;
+package com.myth.countfileline;
 
 import com.myth.time.GetRunTime;
 
