@@ -5,6 +5,9 @@
 
 ## 这是一个使用maven构建的常用工具项目，使用该JAR包有详细的doc规范提示
 
+`包导航 ：`
+****************************************
+
 ### [com.myth.countfileline](https://github.com/Kuangcp/JavaToolKit/tree/master/src/main/java/com/myth/countfileline)
 -  检索记录某文件夹下各种代码文件行数，相对于Python效率比较低
 
@@ -25,6 +28,8 @@
 
 ### [com.myth.time](https://github.com/Kuangcp/JavaToolKit/tree/master/src/main/java/com/myth/time)
 - 关于运行时间的相关类
+
+******************************
 
 #### 2017-3-29 18:21:25
 使用maven构建的项目，个人感觉要比Gradle的构建速度要快。
