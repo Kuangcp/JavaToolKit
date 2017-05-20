@@ -18,8 +18,8 @@ public class HttpRequestTest {
         System.out.println("返回结果；"+result);
         time.endCount("");
         time.startCount();
-        result = HttpRequest.sendGet("http://localhost:8888/myth/test/redis","?q=89");
-        System.out.println("返回结果；"+result);
+//        result = HttpRequest.sendGet("http://localhost:8888/myth/test/redis","?q=89");
+//        System.out.println("返回结果；"+result);
         time.endCount("");
     }
     // 有道翻译的接口，使用的daocloud运行的实例注册的
