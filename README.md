@@ -3,6 +3,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a98ea20e4ff64eee90c43ac2a480e9a8)](https://www.codacy.com/app/Kuangcp/JavaToolKit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Kuangcp/JavaToolKit&amp;utm_campaign=Badge_Grade)
 [![codebeat badge](https://codebeat.co/badges/9ff07ca0-4c34-448d-a594-507fd9d34ec6)](https://codebeat.co/projects/github-com-kuangcp-javatoolkit-master)
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE.md) 
+[![Versuib](https://img.shields.io/github/tag/Kuangcp/JavaToolKit.svg)](https://github.com/Kuangcp/JavaToolKit/releases)
 ## 这是一个使用maven构建的常用工具项目，使用该JAR包有详细的doc规范提示
 
 `包导航 ：`
