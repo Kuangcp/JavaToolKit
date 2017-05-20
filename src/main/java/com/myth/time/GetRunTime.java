@@ -12,14 +12,14 @@ public class GetRunTime {
 	/**
 	 * 开始计时
 	 */
-	public void Start(){
+	public void startCount(){
 		start = Calendar.getInstance().getTimeInMillis();
 	}
 	/**
 	 * 输出耗费时间
 	 * @param s 要输出的提示字符串
 	 */
-	public void End(String s){
+	public void endCount(String s){
 		long end = Calendar.getInstance().getTimeInMillis();
 		long waste = end -start;
 		long ms = waste,sec,min,hour;

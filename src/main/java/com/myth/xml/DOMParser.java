@@ -34,7 +34,7 @@ public class DOMParser {
 
     public static void main(String[] args) throws Exception{
         GetRunTime time = new GetRunTime();
-        time.Start();
+        time.startCount();
         DOMParser parser = new DOMParser();
         Document document = parser.parse("/books.xml");
         //get root element
@@ -67,7 +67,7 @@ public class DOMParser {
                 System.out.println(id);
             }
         }
-        time.End("读取XML成功");
+        time.endCount("读取XML成功");
 
     }
 

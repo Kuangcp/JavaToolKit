@@ -44,7 +44,7 @@ public class CountLine {
 	}
 	public static void main(String[] args) {
 		GetRunTime s = new GetRunTime();
-		s.Start();
+		s.startCount();
 		System.out.println("请输入项目根目录，资源管理器复制路径即可");
 		Scanner sc = new Scanner(System.in);
 		String path = sc.nextLine();
@@ -53,7 +53,7 @@ public class CountLine {
 		for (String aType : type) {
 			System.out.println(aType + " : " + typeMap.get(aType));
 		}
-		s.End("");
+		s.endCount("");
 	}
 	/**
 	 * @param path 一个文件夹的PATH,递归该文件夹
