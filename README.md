@@ -1,13 +1,15 @@
+## JavaToolKit
 [![Build Status](https://travis-ci.org/Kuangcp/JavaToolKit.svg?branch=master)](https://travis-ci.org/Kuangcp/JavaToolKit)
 [![Java Version](https://img.shields.io/badge/Java-JRE%208-red.svg)](https://www.java.com/download/)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a98ea20e4ff64eee90c43ac2a480e9a8)](https://www.codacy.com/app/Kuangcp/JavaToolKit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Kuangcp/JavaToolKit&amp;utm_campaign=Badge_Grade)
 [![codebeat badge](https://codebeat.co/badges/9ff07ca0-4c34-448d-a594-507fd9d34ec6)](https://codebeat.co/projects/github-com-kuangcp-javatoolkit-master)
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE.md) 
 [![Versuib](https://img.shields.io/github/tag/Kuangcp/JavaToolKit.svg)](https://github.com/Kuangcp/JavaToolKit/releases)
-## 这是一个使用maven构建的常用工具项目，使用该JAR包有详细的doc规范提示
 
-`包导航 ：`
+> 这是一个使用maven构建的常用工具项目，使用该JAR包有详细的doc规范提示
+
 ****************************************
+`各个包的说明：`
 
 ### [com.myth.countfileline](https://github.com/Kuangcp/JavaToolKit/tree/master/src/main/java/com/myth/countfileline)
 -  检索记录某文件夹下各种代码文件行数，相对于Python效率比较低
@@ -32,5 +34,3 @@
 
 ******************************
 
-#### 2017-3-29 18:21:25
-使用maven构建的项目，个人感觉要比Gradle的构建速度要快。
