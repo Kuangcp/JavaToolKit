@@ -140,10 +140,12 @@ public class Mysql implements DataBaseAction{
 			for (String sql:sqls){
 				i++;
 				ps=cn.prepareStatement(sql);
-				ps.executeUpdate();
-				System.out.println("第"+i+"条记录插入成功");
+				ps.addBatch();
+//				System.out.println("第"+i+"条记录插入成功");
 			}
-			cn.commit();//无异常再提交
+			ps.executeBatch();
+            System.out.println("批量操作无异常");
+            cn.commit();//无异常再提交
 		}catch(Exception e){
 			success = false;
 			try {

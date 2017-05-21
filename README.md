@@ -7,7 +7,14 @@
 [![Versuib](https://img.shields.io/github/tag/Kuangcp/JavaToolKit.svg)](https://github.com/Kuangcp/JavaToolKit/releases)
 
 > 这是一个使用maven构建的常用工具项目，使用该JAR包有详细的doc规范提示
+**********************************
+- 下载Jar安装，由于没有发布到中央仓库
+    - `mvn install:install-file -Dfile=下载jar包的路径 -DgroupId=Myth -DartifactId=JavaToolKit -Dversion=1.0-SNAPSHOT -Dpackaging=jar`
+- 或者编译安装
+    - `git clone https://github.com/kuangcp/JavaToolKit.git`
+    - `cd JavaToolKit` && ` mvn install`
 
+- 如果要发布到中央仓库，注意groupid格式 com.github.kuangcp
 ****************************************
 `各个包的说明：`
 
@@ -30,7 +37,6 @@
 - 关于二维码的相关操作类
 
 ### [com.myth.time](https://github.com/Kuangcp/JavaToolKit/tree/master/src/main/java/com/myth/time)
-- 关于运行时间的相关类
+- 关于记录运行时间的相关类
 
-******************************
 
