@@ -12,3 +12,7 @@ bin/
 .classpath
 .project
 Servers/
+
+# Delete Secret Configuration Files
+mails.properties
+mysql.properties

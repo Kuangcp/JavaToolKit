@@ -13,7 +13,8 @@
 - 或者编译安装
     - `git clone https://github.com/kuangcp/JavaToolKit.git`
     - `cd JavaToolKit` && ` mvn install`
-
+- *注意 : *配置文件的建立，为了安全没有提交 [配置文件模板](https://github.com/Kuangcp/JavaToolKit/blob/master/Config.md)
+    - 改成自己需要的配置就可以了
 - 如果要发布到中央仓库，注意groupid格式 com.github.kuangcp
 ****************************************
 `各个包的说明：`
