@@ -13,7 +13,9 @@
 - 或者编译安装
     - `git clone https://github.com/kuangcp/JavaToolKit.git`
     - `cd JavaToolKit` && ` mvn install`
-- *注意 : *配置文件的建立，为了安全没有提交 [配置文件模板](https://github.com/Kuangcp/JavaToolKit/blob/master/Config.md)
+- *注意 : *配置文件的建立，为了安全没有提交 ，
+    - 只要将config目录下复制到src/main/resources/目录下
+    - 然后更名 去掉每个配置文件前的 `model_ ` 即可正常使用了
     - 改成自己需要的配置就可以了
 - 如果要发布到中央仓库，注意groupid格式 com.github.kuangcp
 ****************************************
