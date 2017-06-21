@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class CreateQRCode {
 
 	public static void main(String[] args) {
-		CreateQRCode.CreateImage("D:/img1.png",  200, 200, "https://github.com/Kuangcp");
+		CreateQRCode.CreateImage("/home/kcp/Code/wechat/itchat4j/QR2.jpg",  200, 200, "https://login.weixin.qq.com/l/oZGsfKGyrw==");
 		System.out.println("OK");
 	}
 	/**

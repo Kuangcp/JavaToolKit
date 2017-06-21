@@ -19,7 +19,8 @@ import java.util.HashMap;
 public class ReadQRCode {
 
 	public static void main(String[] args) {
-		ReadQRCode.readQRCodeFromFile("D:/img1.png");
+//		"/home/kcp/Code/wechat/itchat4j/QR.jpg"
+		ReadQRCode.readQRCodeFromFile(args[0]);
 	}
 	@SuppressWarnings("unchecked")
 	public static void readQRCodeFromFile(String path){
@@ -32,7 +33,7 @@ public class ReadQRCode {
 			HashMap hints = new HashMap();//创建属性
 			hints.put(EncodeHintType.AZTEC_LAYERS, "utf-8");//设置编码
 			Result result = formatReader.decode(binaryBitmap,hints);
-			System.out.println("解析结果："+result.toString());
+			System.out.println(result.toString());
 		} catch (NotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
