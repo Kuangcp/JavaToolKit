@@ -13,8 +13,7 @@ import java.util.HashMap;
 /**
  * 因为二维码具有一定的容错能力，所以可以给二维码进行美化，加上logo……
  * @author  Myth
- * @date 2016年10月4日 上午8:45:41
- * @TODO
+ * 2016年10月4日 上午8:45:41
  */
 public class ReadQRCode {
 

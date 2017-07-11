@@ -19,27 +19,28 @@
     - 改成自己需要的配置就可以了
 - 如果要发布到中央仓库，注意groupid格式 com.github.kuangcp
 ****************************************
+
 `各个包的说明：`
 
-### [com.myth.countfileline](https://github.com/Kuangcp/JavaToolKit/tree/master/src/main/java/com/myth/countfileline)
+### [com.myth.countfileline](./src/main/java/com/myth/countfileline)
 -  检索记录某文件夹下各种代码文件行数，相对于Python效率比较低
 
-### [com.myth.file](https://github.com/Kuangcp/JavaToolKit/tree/master/src/main/java/com/myth/file)
+### [com.myth.file](./src/main/java/com/myth/file)
 -  文件，压缩包操作相关类
 
-### [com.myth.mail](https://github.com/Kuangcp/JavaToolKit/tree/master/src/main/java/com/myth/mail)
+### [com.myth.mail](./src/main/java/com/myth/mail)
 -  使用配置文件中的配置信息发送指定邮件（发送的是html）
 
-### [com.myth.mysql ](https://github.com/Kuangcp/JavaToolKit/tree/master/src/main/java/com/myth/mysql)
--  是数据库的相关操作，数据库表和Excel的转换
+### [com.myth.mysql ](./src/main/java/com/myth/mysql)
+-  是Mysql数据库的相关操作，数据库表和Excel的转换
 
-### [com.myth.reflect](https://github.com/Kuangcp/JavaToolKit/tree/master/src/main/java/com/myth/reflect)
+### [com.myth.reflect](./src/main/java/com/myth/reflect)
 - 关于Java反射，ORM 的手动编写
 
-### [com.myth.qrcode](https://github.com/Kuangcp/JavaToolKit/tree/master/src/main/java/com/myth/qrcode)
+### [com.myth.qrcode](./src/main/java/com/myth/qrcode)
 - 关于二维码的相关操作类
 
-### [com.myth.time](https://github.com/Kuangcp/JavaToolKit/tree/master/src/main/java/com/myth/time)
+### [com.myth.time](./src/main/java/com/myth/time)
 - 关于记录运行时间的相关类
 
 
