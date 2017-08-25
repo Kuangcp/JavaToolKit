@@ -47,7 +47,7 @@ public class DOMParser {
             Node node = nodes.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element child = (Element) node;
-                //process child element
+                //threads child element
             }
         }
 
