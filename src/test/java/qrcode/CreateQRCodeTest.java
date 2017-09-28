@@ -10,6 +10,6 @@ public class CreateQRCodeTest {
 
     @Test
     public void testCreateFile(){
-        CreateQRCode.createImage("/home/kcp/test/test.jpg",  200, 200, "https://login.weixin.qq.com/l/oZGsfKGyrw==");
+//        CreateQRCode.createImage("/home/kcp/test/test.jpg",  200, 200, "https://login.weixin.qq.com/l/oZGsfKGyrw==");
     }
 }
