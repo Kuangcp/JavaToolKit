@@ -17,10 +17,10 @@ import java.util.HashMap;
  */
 public class CreateQRCode {
 
-	public static void main(String[] args) {
-		CreateQRCode.CreateImage("/home/kcp/Code/wechat/itchat4j/QR2.jpg",  200, 200, "https://login.weixin.qq.com/l/oZGsfKGyrw==");
-		System.out.println("OK");
-	}
+//	public static void main(String[] args) {
+//		CreateQRCode.createImage("/home/kcp/Code/wechat/itchat4j/QR2.jpg",  200, 200, "https://login.weixin.qq.com/l/oZGsfKGyrw==");
+//		System.out.println("OK");
+//	}
 	/**
 	 *
 	 * @param path 完整的路径包括文件名
@@ -28,7 +28,7 @@ public class CreateQRCode {
 	 * @param height 图片高
 	 * @param contents 内容
 	 */
-	public static void CreateImage(String path,int width,int height,String contents){
+	public static void createImage(String path,int width,int height,String contents){
 		String format = "png";
 		//定义二维码的参数
 		HashMap hints = new HashMap();

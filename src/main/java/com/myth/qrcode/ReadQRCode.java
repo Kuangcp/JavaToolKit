@@ -17,12 +17,18 @@ import java.util.HashMap;
  */
 public class ReadQRCode {
 
-	public static void main(String[] args) {
-//		"/home/kcp/Code/wechat/itchat4j/QR.jpg"
-		ReadQRCode.readQRCodeFromFile(args[0]);
-	}
+//	public static void main(String[] args) {
+////		"/home/kcp/Code/wechat/itchat4j/QR.jpg"
+//		ReadQRCode.readQRCodeFromFile(args[0]);
+//	}
+
+        /**
+         * 读取绝对路径下的二维码图片
+         * @param path 绝对路径
+         * @return 返回二维码文本，失败返回null
+         */
 	@SuppressWarnings("unchecked")
-	public static void readQRCodeFromFile(String path){
+	public static String readQRCodeFromFile(String path){
 		try {
 			MultiFormatReader formatReader = new MultiFormatReader();
 			File file = new File(path);
@@ -33,10 +39,11 @@ public class ReadQRCode {
 			hints.put(EncodeHintType.AZTEC_LAYERS, "utf-8");//设置编码
 			Result result = formatReader.decode(binaryBitmap,hints);
 			System.out.println(result.toString());
-		} catch (NotFoundException e) {
+			return result.toString();
+		} catch (NotFoundException | IOException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+            return null;
 		}
+
 	}
 }
