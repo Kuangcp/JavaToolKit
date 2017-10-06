@@ -45,6 +45,14 @@ public class ReadQRCode {
         return result.toString();
 
 	}
+
+    /**
+     * TODO URL的阅读能力
+     * @param url
+     * @return
+     * @throws IOException
+     * @throws NotFoundException
+     */
 	public static String readQRCodeFromURL(String url) throws IOException, NotFoundException {
         MultiFormatReader formatReader = new MultiFormatReader();
 	    InputStream file = new URL(url).openStream();
