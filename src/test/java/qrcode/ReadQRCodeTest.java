@@ -14,18 +14,18 @@ import java.net.MalformedURLException;
  */
 public class ReadQRCodeTest {
 
-    @Test
+//    @Test
     public void testFile() throws IOException, NotFoundException {
-//        String result = ReadQRCode.readQRCodeFromFile("/home/kcp/Documents/1592490429.jpg");
-//        Assert.assertEquals("http://e22a.com/A.ChVCF",result);
+        String result = ReadQRCode.readQRCodeFromFile("/home/kcp/Documents/1592490429.jpg");
+        Assert.assertEquals("http://e22a.com/A.ChVCF",result);
     }
 
-    @Test
+//    @Test
     public void testUrl(){
-//        try {
-//            ReadQRCode.readQRCodeFromURL("http://ovjs7rsrm.bkt.clouddn.com/1592490429.jpg");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            ReadQRCode.readQRCodeFromURL("http://ovjs7rsrm.bkt.clouddn.com/1592490429.jpg");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
