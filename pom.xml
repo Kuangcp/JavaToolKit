@@ -68,8 +68,6 @@
             <artifactId>jsoup</artifactId>
             <version>1.9.2</version>
         </dependency>
-        <!--compile 'com.qiniu:qiniu-java-sdk:7.2.6'-->
-        <!--compile 'org.slf4j:slf4j-api:1.7.22'-->
         <dependency>
             <groupId>com.qiniu</groupId>
             <artifactId>qiniu-java-sdk</artifactId>
@@ -80,8 +78,6 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.22</version>
         </dependency>
-
-
     </dependencies>
 
     <build>

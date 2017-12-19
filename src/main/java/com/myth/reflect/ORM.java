@@ -84,7 +84,7 @@ public class ORM {
 	 * @param value  属性值
 	 * @return Object 对象
 	 */
-	public static List findByProperty(String className,String property,String value){
+	public static List<Object> findByProperty(String className, String property, String value){
 		Object obj;
 		List list = new ArrayList();
 		String tableName = className.split("\\.")[className.split("\\.").length-1];

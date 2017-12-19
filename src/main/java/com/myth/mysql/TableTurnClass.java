@@ -308,7 +308,7 @@ public class TableTurnClass{
 		try {
 			Class.forName(Driver);
 			cn = DriverManager.getConnection(URL);
-			cn.prepareStatement(" use "+database+"").execute();
+			cn.prepareStatement(String.format(" use %s", database)).execute();
 			ps=cn.prepareStatement( "show tables");
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
