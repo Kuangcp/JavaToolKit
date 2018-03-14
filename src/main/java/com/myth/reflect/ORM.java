@@ -39,7 +39,8 @@ public class ORM {
 
 		for(Method m:ms){
 			String mName = m.getName();
-			if(mName.startsWith("get") && !mName.startsWith("getClass")){//将所有get开头的方法取出来
+			//将所有get开头的方法取出来
+			if(mName.startsWith("get") && !mName.startsWith("getClass")){
 				String colName = mName.substring(3,mName.length());
 				sb.append(colName).append(",");
 				Class returnType = m.getReturnType();
@@ -48,13 +49,17 @@ public class ORM {
 				try {
 					if(returnType == String.class){
 						String p=  (String)m.invoke(obj);
-						if(p!=null) va.append("'").append(p).append("',");
+						if(p!=null) {
+                            va.append("'").append(p).append("',");
+                        }
 					}else if(returnType==long.class || returnType==int.class ){
 						long p = (Long)m.invoke(obj);
 						va.append(p).append(",");
 					}else if( returnType==Integer.class){
 						Integer p = (Integer)m.invoke(obj);
-						if(p!=null) va.append(p).append(",");
+						if(p!=null){
+						    va.append(p).append(",");
+                        }
 					}else if( returnType==Date.class){
 						Date p = (Date)m.invoke(obj);
 						StringBuilder pp = new StringBuilder(new SimpleDateFormat("YYYY-MM-dd HH:MM:SS").format(p));
