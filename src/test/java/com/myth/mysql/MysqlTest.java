@@ -2,6 +2,7 @@ package com.myth.mysql;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
  * @author kuangcp
  * @date 18-3-14  上午11:10
  */
+@Ignore
 public class MysqlTest {
 
     private  Mysql mysql;
