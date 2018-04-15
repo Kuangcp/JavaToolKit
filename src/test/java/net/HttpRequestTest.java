@@ -2,12 +2,14 @@ package net;
 
 import com.myth.net.HttpRequest;
 import com.myth.time.GetRunTime;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Created by mythos on 17-5-15
  * By kuangchengping@outlook.com
  */
+@Ignore
 public class HttpRequestTest {
 
     @Test
