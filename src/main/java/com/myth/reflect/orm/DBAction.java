@@ -1,4 +1,8 @@
-package com.myth.mysql;
+package com.myth.reflect.orm;
+
+import com.myth.reflect.orm.base.DBType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -6,9 +10,11 @@ import java.util.List;
 
 /**
  * 切记要导JAR驱动包，还有配置好URL
+ *
  * @author Myth on 2016年7月24日
  */
-public class Mysql implements DataBaseAction{
+public class DBAction {
+    private Logger log = LoggerFactory.getLogger(DBAction.class);
     private static int count = 0;
     private PreparedStatement ps = null;
     private Connection cn = null;
@@ -17,137 +23,150 @@ public class Mysql implements DataBaseAction{
     private StringBuilder url = new StringBuilder();
 
     /**
-     * 手动设置链接数据的属性
+     * 通过配置进行初始化
+     * @param config DBConfig
+     * @param type DBType
      */
-    public Mysql(BaseConfig config){
+    public DBAction(DBConfig config, DBType type) {
         this.driver = config.getDriver();
-        this.url.append("jdbc:mysql://").append(config.getHost()).append(":").append(config.getPort())
+        this.url.append("jdbc:").append(type.name()).append("://").append(config.getHost()).append(":").append(config.getPort())
                 .append("/").append(config.getDatabase()).append("?user=")
                 .append(config.getUsername()).append("&password=").append(config.getPassword())
                 .append("&userUnicode=true&characterEncoding=UTF8");
     }
+
     /**
-     * 采用默认配置文件作为默认配置
+     * Mysql 操作
      */
-    public Mysql(){
-        this(BaseConfig.initByYaml());
+    public static DBAction buildWithMysql(DBConfig config){
+        return new DBAction(config, DBType.MYSQL);
     }
 
-    /**根据参数获取数据库连接对象
+    /**
+     * PostgreSQL 操作
+     */
+    public static DBAction buildWithPostgreSQL(DBConfig config){
+        return new DBAction(config, DBType.POSTGRESQL);
+    }
+
+    /**
+     * 根据参数获取数据库连接对象
      * @return Connection 连接
      */
-    @Override
-    public Connection getConnection(){
+    public Connection getConnection() {
         try {
             Class.forName(driver);
             cn = DriverManager.getConnection(url.toString());
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("获取连接，异常！");
+            log.error(url.toString() + " 获取连接，异常！", e);
         }
         return cn;
     }
+
     private void loadPreparedStatement(String sql) throws SQLException {
         getConnection();
         ps = cn.prepareStatement(sql);
     }
 
-    /**查询全部的操作 返回值是ResultSet 切记使用完后要finally关闭*/
-    @Override
-    public ResultSet queryBySQL(String sql){
+    /**
+     * 查询全部的操作 返回值是ResultSet 切记使用完后要finally关闭
+     */
+    public ResultSet queryBySQL(String sql) {
         count++;
         try {
             loadPreparedStatement(sql);
-            rs=ps.executeQuery();
+            rs = ps.executeQuery();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("这是第"+count+"次查询操作");
+        log.debug("这是第" + count + "次查询操作");
         return rs;
     }
+
     /**
      * SQL查询并返回List集合
+     *
      * @param sql SQL 语句
      * @return List String数组 一行是一个String[] 按查询的字段顺序
      */
-    @Override
-    public List<String []> queryReturnList(String sql){
+    public List<String[]> queryReturnList(String sql) throws SQLException {
+        log.debug("查询SQL " + sql);
         int cols;
-        List <String []> data = new ArrayList<>(0);
+        List<String[]> data = new ArrayList<>(0);
         ResultSet rs = queryBySQL(sql);
         try {
-            //获取总列数
             cols = rs.getMetaData().getColumnCount();
-            while(rs.next()){
-                //为什么放在while外面就会出现最后一组元素覆盖整个数组？
-                String [] row = new String [cols];
-                for (int i=0;i<cols;i++){
+            while (rs.next()) {
+                String[] row = new String[cols];
+                for (int i = 0; i < cols; i++) {
                     row[i] = rs.getString(++i);
                 }
                 data.add(row);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-        }finally{
+            log.error("查询异常", e);
+            throw e;
+        } finally {
             this.closeAll();
         }
         return data;
     }
-    /**把增删改 合在一起 返回值是 布尔值
+
+    /**
+     * 把增删改 合在一起 返回值是 布尔值
      * 各种连接已经关闭了不用再次关闭了
      * SQL只能输一句，不能多句运行
+     *
      * @param sql 执行的SQL
      * @return boolean 是否执行成功
      */
-    @Override
-    public boolean executeUpdateSQL(String sql){
+    public boolean executeUpdateSQL(String sql) throws SQLException {
+        log.debug("执行SQL " + sql);
         boolean flag = true;
-        try{
+        try {
             loadPreparedStatement(sql);
-            int i=ps.executeUpdate();
-            System.out.print("    增删改查成功_"+i+"_行受影响-->");
-            if(i!=1){
-                flag=false;
+            int i = ps.executeUpdate();
+            log.debug("    增删改查成功_" + i + "_行受影响-->");
+            if (i != 1) {
+                flag = false;
             }
-        }catch(Exception e){
-            e.printStackTrace();
-            System.out.println("增删改查失败");
-            flag=false;
-        }finally {
+        } catch (Exception e) {
+            log.error("增删改查失败", e);
+            throw e;
+        } finally {
             this.closeAll();
         }
         return flag;
     }
+
     /**
      * 插入多条数据并采用了事务
-     * @param sqls SQL的String数组
+     *
+     * @param sqlArray SQL的String数组
      * @return boolean 是否成功
-     * */
-    @Override
-    public boolean batchInsertWithAffair(String [] sqls){
+     */
+    public boolean batchInsertWithAffair(String[] sqlArray) {
         boolean success = true;
-        try{
-            Class.forName(driver);
-            cn = DriverManager.getConnection(url.toString());
+        try {
+            cn = getConnection();
             cn.setAutoCommit(false);
-            for (int i = 0; i < sqls.length; i++) {
-                ps=cn.prepareStatement(sqls[i]);
+            for (int i = 0; i < sqlArray.length; i++) {
+                ps = cn.prepareStatement(sqlArray[i]);
                 ps.addBatch();
-                System.out.println("第"+i+"条记录插入成功");
+                log.debug("第" + i + "条记录插入成功");
             }
             ps.executeBatch();
-            System.out.println("批量操作无异常, 全部提交");
-            cn.commit();//无异常再提交
-        }catch(Exception e){
+            log.info("批量操作无异常, 全部提交");
+            cn.commit();
+        } catch (Exception e) {
             success = false;
             try {
                 cn.rollback();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-            e.printStackTrace();
-            System.out.println("增删改查失败");
-        }finally {
+            log.error("增删改查失败", e);
+        } finally {
             try {
                 cn.setAutoCommit(true);
             } catch (SQLException e) {
@@ -157,23 +176,25 @@ public class Mysql implements DataBaseAction{
         }
         return success;
     }
-    /**关闭数据库资源*/
-    public void closeAll(){
+
+    /**
+     * 关闭数据库资源
+     */
+    public void closeAll() {
         //关闭资源 后打开先关闭
         try {
-            if(rs!=null){
+            if (rs != null) {
                 rs.close();
             }
-            if(ps!=null){
+            if (ps != null) {
                 ps.close();
             }
-            if(cn!=null){
+            if (cn != null) {
                 cn.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("资源关闭异常");
+            log.error("资源关闭异常", e);
         }
-        System.out.println("正常-关闭资源");
+        log.debug("正常-关闭资源");
     }
 }

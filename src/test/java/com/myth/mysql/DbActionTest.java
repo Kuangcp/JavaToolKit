@@ -1,5 +1,8 @@
 package com.myth.mysql;
 
+import com.myth.reflect.orm.DBAction;
+import com.myth.reflect.orm.DBConfig;
+import com.myth.reflect.orm.base.DBType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -16,26 +19,28 @@ import java.sql.SQLException;
  * @date 18-3-14  上午11:10
  */
 @Ignore
-public class MysqlTest {
+public class DbActionTest {
 
-    private  Mysql mysql;
+    private DBAction DBAction;
     @Before
     public void init(){
-        BaseConfig config = new BaseConfig().initDriver("com.mysql.jdbc.Driver").initDatabase("test")
-                .initHost("localhost").initPort(3306)
-                .initUsername("myth").initPassword("ad");
-        System.out.println(config.toString());
-        mysql = new Mysql(config);
+        DBConfig dbConfig = new DBConfig().setDatabase("test")
+                .setDriver("com.DBAction.jdbc.Driver")
+                .setHost("localhost")
+                .setPort(3306)
+                .setUsername("root")
+                .setPassword("jiushi");
+        DBAction = new DBAction(dbConfig, DBType.MYSQL);
     }
     @Test
     public void testGetConnection() {
-        Connection result = mysql.getConnection();
+        Connection result = DBAction.getConnection();
         assert result != null;
     }
 
     @Test(timeout = 2000)
     public void testQueryBySQL() throws SQLException {
-        ResultSet result = mysql.queryBySQL("select * from a");
+        ResultSet result = DBAction.queryBySQL("select * from a");
         assert result != null;
         while (result.next()){
             System.out.println(result.getString(1)+"|"+result.getString(2));
@@ -44,21 +49,19 @@ public class MysqlTest {
 
     @Test
     public void testQueryReturnList() {
-//        List<String> result = mysql.queryReturnList("sql");
+//        List<String> result = DBAction.queryReturnList("sql");
 //        Assert.assertEquals(Arrays.<String>asList(new String[]{"String"}), result);
     }
 
     @Test
-    public void testExecuteUpdateSQL() {
-        boolean result = mysql.executeUpdateSQL("sql");
+    public void testExecuteUpdateSQL() throws SQLException {
+        boolean result = DBAction.executeUpdateSQL("sql");
         Assert.assertEquals(true, result);
     }
 
     @Test
     public void testBatchInsertWithAffair() {
-        boolean result = mysql.batchInsertWithAffair(new String[]{"sqls"});
+        boolean result = DBAction.batchInsertWithAffair(new String[]{"sqls"});
         Assert.assertEquals(true, result);
     }
 }
-
-//Generated with love by TestMe :) Please report issues and submit feature requests at: http://weirddev.com/forum#!/testme

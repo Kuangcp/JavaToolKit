@@ -1,6 +1,6 @@
 //package com.myth.file;
 //
-//import com.myth.mysql.Mysql;
+//import com.myth.mysql.DBAction;
 //import net.lingala.zip4j.exception.ZipException;
 //
 //import java.io.*;
@@ -165,7 +165,7 @@
 //
 ////	/**获取原始字符*/
 ////	public static List<String> getCode(){
-////		Mysql db = new Mysql("test","3306","root","123456");
+////		DBAction db = new DBAction("test","3306","root","123456");
 ////		String srcs = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 ////
 ////		List<String> list = new ArrayList<String>();

@@ -136,7 +136,7 @@
 //		String Path="F:/ASs.xls";
 //
 //		Runs(sql, title, Path);*/
-//		Mysql db = new Mysql("student","3306","root","ad");
+//		DBAction db = new DBAction("student","3306","root","ad");
 //		List<String[]> data = db.queryReturnList("select * from student");
 //		ResultSet rs = db.queryBySQL("select * from student");
 //
@@ -167,7 +167,7 @@
 //		HSSFCell cell ;
 //		//得到所有数据
 //		List<List<String []>> list = new ArrayList<List<String []>>();
-//		Mysql db = new Mysql("student","3306","root","ad");
+//		DBAction db = new DBAction("student","3306","root","ad");
 //		for (int i=0;i<sql.length;i++){
 //			list.add(db.queryReturnList(sql[i]));
 //		}
@@ -282,7 +282,7 @@
 //
 //	/**把SQL查询结果转换成List集合,载入属性tables中*/
 //	private void writerDataBySQL(String sql){
-//		Mysql db = new Mysql("student","3306","root","ad");
+//		DBAction db = new DBAction("student","3306","root","ad");
 //		tables = db.queryReturnList(sql);
 //		RowNum = tables.size();
 //		ColNum = tables.get(0).length;
