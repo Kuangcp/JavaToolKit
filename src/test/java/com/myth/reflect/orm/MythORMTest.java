@@ -10,7 +10,7 @@ import org.junit.Test;
  * @date 18-4-21  下午7:38
  */
 public class MythORMTest {
-    MythORM mythOrm = MythORM.build(DBType.MYSQL);
+    MythORM mythOrm = MythORM.build(DBType.Mysql);
     @Test
     public void testClassToTableName(){
         String result = mythOrm.classToTableName("targetDatabase");

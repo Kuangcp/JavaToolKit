@@ -43,7 +43,7 @@ public class CountLine {
 		}
 	}
 	public static void main(String[] args) {
-		GetRunTime s = new GetRunTime();
+		GetRunTime s = GetRunTime.INSTANCE;
 		s.startCount();
 		System.out.println("请输入项目根目录，资源管理器复制路径即可");
 		Scanner sc = new Scanner(System.in);

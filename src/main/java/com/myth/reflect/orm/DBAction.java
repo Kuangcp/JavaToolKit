@@ -39,14 +39,14 @@ public class DBAction {
      * Mysql 操作
      */
     public static DBAction buildWithMysql(DBConfig config){
-        return new DBAction(config, DBType.MYSQL);
+        return new DBAction(config, DBType.Mysql);
     }
 
     /**
      * PostgreSQL 操作
      */
     public static DBAction buildWithPostgreSQL(DBConfig config){
-        return new DBAction(config, DBType.POSTGRESQL);
+        return new DBAction(config, DBType.PostgreSQL);
     }
 
     /**

@@ -161,7 +161,7 @@ public class MythORM {
         T obj;
         DBAction db = null;
         try {
-            db = new DBAction(DBConfig, DBType.MYSQL);
+            db = new DBAction(DBConfig, DBType.Mysql);
             ResultSet resultSet = db.queryBySQL(sql);
             Method methods[] = target.getMethods();
             while (resultSet.next()) {

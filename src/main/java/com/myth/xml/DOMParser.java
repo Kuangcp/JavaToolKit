@@ -33,7 +33,7 @@ public class DOMParser {
     }
 
     public static void main(String[] args) throws Exception{
-        GetRunTime time = new GetRunTime();
+        GetRunTime time = GetRunTime.INSTANCE;
         time.startCount();
         DOMParser parser = new DOMParser();
         Document document = parser.parse("/books.xml");

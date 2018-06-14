@@ -62,6 +62,7 @@ repositories {
 
 -  [com.myth.reflect](./src/main/java/com/myth/reflect)
     - 关于Java反射，ORM 的手动编写
+    - [ ] DBType的丰富和测试通过
 
 - [com.myth.qrcode](./src/main/java/com/myth/qrcode)
     - 关于二维码的相关操作类
