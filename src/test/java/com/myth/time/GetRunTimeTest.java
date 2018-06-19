@@ -16,7 +16,7 @@ public class GetRunTimeTest {
   public void testStartCount() throws Exception {
     getRunTime.startCount();
     int a = 1888888888;
-    for (int i = 0; i < 100000; i++) {
+    for (int i = 0; i < 10000; i++) {
       a = a ^ i;
       MD5(a+"");
     }
