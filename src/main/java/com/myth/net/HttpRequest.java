@@ -11,6 +11,7 @@ import java.util.Map;
 
 /**
  * Created by mythos on 17-5-15
+ * 使用原生api实现get post
  * By kuangchengping@outlook.com
  */
 public class HttpRequest {

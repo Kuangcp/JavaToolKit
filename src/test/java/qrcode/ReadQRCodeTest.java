@@ -1,13 +1,9 @@
 package qrcode;
 
-import com.google.zxing.NotFoundException;
 import com.myth.qrcode.ReadQRCode;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
 
 /**
  * Created by https://github.com/kuangcp on 17-9-28  上午10:51
@@ -17,7 +13,7 @@ import java.net.MalformedURLException;
 public class ReadQRCodeTest {
 
     @Test
-    public void testFile() throws IOException, NotFoundException {
+    public void testFile()  {
         String result = ReadQRCode.readQRCodeFromFile("/home/kcp/Documents/1592490429.jpg");
         Assert.assertEquals("http://e22a.com/A.ChVCF",result);
     }

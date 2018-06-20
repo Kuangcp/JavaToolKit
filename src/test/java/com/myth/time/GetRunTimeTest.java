@@ -1,6 +1,7 @@
 package com.myth.time;
 
 import java.security.MessageDigest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -8,6 +9,7 @@ import org.junit.Test;
  *
  * @author kuangcp
  */
+@Ignore
 public class GetRunTimeTest {
 
   private GetRunTime getRunTime = GetRunTime.INSTANCE;
