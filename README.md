@@ -72,3 +72,5 @@ repositories {
 
 *******************
 > 其他相关仓库: [util](https://github.com/zhazhapan/util)
+
+- [ ] 将常用类保留, 其他的放在test下 作为代码片段
