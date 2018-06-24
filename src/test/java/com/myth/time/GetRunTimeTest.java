@@ -15,29 +15,27 @@ public class GetRunTimeTest {
   private GetRunTime getRunTime = GetRunTime.INSTANCE;
 
   @Test
-  public void testStartCount() throws Exception {
+  public void testStartCount() {
     getRunTime.startCount();
     int a = 1888888888;
     for (int i = 0; i < 10000; i++) {
       a = a ^ i;
-      MD5(a+"");
+      MD5(a + "");
     }
     getRunTime.endCount("第一个");
 
     getRunTime.startCount();
     for (int i = 0; i < 10000; i++) {
       a = a ^ i;
-      MD5(a+"");
+      MD5(a + "");
     }
     getRunTime.endCount("第二个");
   }
 
   /**
    * Java 内置md5加密
-   * @param s
-   * @return
    */
-  static String MD5(String s) {
+  private static String MD5(String s) {
     char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
         'F'};
 
