@@ -3,7 +3,7 @@ package com.myth.qiniu;
 import static com.myth.common.info.ExceptionInfo.GET_IMAGE_LIST_EXCEPTION;
 import static com.myth.common.info.ExceptionInfo.PARSE_RESPONSE_EXCEPTION;
 import static com.myth.common.info.ExceptionInfo.PROPERTIES_EXCEPTION;
-import static com.myth.common.info.ExceptionInfo.UPLOADFILE_EXCEPTION;
+import static com.myth.common.info.ExceptionInfo.UPLOAD_FILE_EXCEPTION;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -71,7 +71,7 @@ public class QiNiuCloud {
       //调用put方法上传文件
       res = uploadManager.put(filePath, fileName, auth.uploadToken(bucketName));
     } catch (IOException e) {
-      throw new ConnectionException(UPLOADFILE_EXCEPTION, e, QiNiuCloud.class);
+      throw new ConnectionException(UPLOAD_FILE_EXCEPTION, e, QiNiuCloud.class);
     }
     try {
       //解析返回的信息，得到图片地址

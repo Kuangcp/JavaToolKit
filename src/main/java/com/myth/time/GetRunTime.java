@@ -33,8 +33,8 @@ public enum GetRunTime {
     sec = ms / 1_000;
     ms -= sec * 1_000;
 
-    String format = "▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁\n▌Info   ▏ %s\n"
-        + "▌Total  ▏ %3s ms\n▌Format ▏ %2s h : %2s m : %2s s : %3s ms";
+    String format = "▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁\n▌   Info: %s\n"
+        + "▌  Total: %3s ms\n▌ Format: %2s h : %2s m : %2s s : %3s ms\n";
     System.out.println(String.format(format, info, totalMillis, hour, min, sec, ms));
   }
 }
