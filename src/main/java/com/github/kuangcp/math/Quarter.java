@@ -1,4 +1,4 @@
-package com.myth.math;
+package com.github.kuangcp.math;
 
 /**
  * Created by Myth on 2017/3/21

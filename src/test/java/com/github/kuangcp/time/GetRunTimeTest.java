@@ -1,15 +1,14 @@
-package com.myth.time;
+package com.github.kuangcp.time;
 
 import java.security.MessageDigest;
-import org.junit.Ignore;
 import org.junit.Test;
+
 
 /**
  * Created by https://github.com/kuangcp
  *
  * @author kuangcp
  */
-@Ignore
 public class GetRunTimeTest {
 
   private GetRunTime getRunTime = GetRunTime.INSTANCE;
@@ -18,14 +17,14 @@ public class GetRunTimeTest {
   public void testStartCount() {
     getRunTime.startCount();
     int a = 1888888888;
-    for (int i = 0; i < 10000; i++) {
+    for (int i = 0; i < 100; i++) {
       a = a ^ i;
       MD5(a + "");
     }
     getRunTime.endCount("第一个");
 
     getRunTime.startCount();
-    for (int i = 0; i < 10000; i++) {
+    for (int i = 0; i < 100; i++) {
       a = a ^ i;
       MD5(a + "");
     }

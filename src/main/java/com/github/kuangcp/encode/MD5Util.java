@@ -1,5 +1,6 @@
-package utils;
+package com.github.kuangcp.encode;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 
@@ -8,7 +9,7 @@ public class MD5Util {
   public static String encrypt(String dataStr) {
     try {
       MessageDigest m = MessageDigest.getInstance("MD5");
-      m.update(dataStr.getBytes("UTF8"));
+      m.update(dataStr.getBytes(StandardCharsets.UTF_8));
       byte s[] = m.digest();
       StringBuilder result = new StringBuilder();
       for (byte value : s) {

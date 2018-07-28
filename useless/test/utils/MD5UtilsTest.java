@@ -1,5 +1,6 @@
 package utils;
 
+import com.github.kuangcp.encode.MD5Util;
 import org.junit.Ignore;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.myth.time;
+package com.github.kuangcp.time;
 
 import java.time.Instant;
 
@@ -34,7 +34,7 @@ public enum GetRunTime {
     ms -= sec * 1_000;
 
     String format = "▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁\n▌   Info: %s\n"
-        + "▌  Total: %3s ms\n▌ Format: %2s h : %2s m : %2s s : %3s ms\n";
+        + "▌  Total: %-3sms\n▌ Format: %sh %sm %ss %sms\n";
     System.out.println(String.format(format, info, totalMillis, hour, min, sec, ms));
   }
 }

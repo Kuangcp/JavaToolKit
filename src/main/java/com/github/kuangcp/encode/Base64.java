@@ -1,4 +1,4 @@
-package utils;
+package com.github.kuangcp.encode;
 
 import java.io.UnsupportedEncodingException;
 

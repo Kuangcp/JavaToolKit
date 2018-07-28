@@ -1,5 +1,6 @@
-package utils;
+package com.github.kuangcp.encode;
 
+import com.github.kuangcp.encode.Base64;
 import java.security.Key;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;

@@ -1,6 +1,6 @@
 package time;
 
-import com.myth.time.DateFormatUtils;
+import com.github.kuangcp.time.DateFormatUtils;
 import java.util.Date;
 import org.junit.Ignore;
 import org.junit.Test;

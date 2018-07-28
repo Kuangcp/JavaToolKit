@@ -1,7 +1,7 @@
 package net;
 
 import com.myth.net.HttpRequest;
-import com.myth.time.GetRunTime;
+import com.github.kuangcp.time.GetRunTime;
 import org.junit.Ignore;
 import org.junit.Test;
 
