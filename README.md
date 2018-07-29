@@ -3,6 +3,7 @@
 [![Java Version](https://img.shields.io/badge/Java-JRE%208-red.svg)](https://www.java.com/download/)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a98ea20e4ff64eee90c43ac2a480e9a8)](https://www.codacy.com/app/Kuangcp/JavaToolKit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Kuangcp/JavaToolKit&amp;utm_campaign=Badge_Grade)
 [![codebeat badge](https://codebeat.co/badges/9ff07ca0-4c34-448d-a594-507fd9d34ec6)](https://codebeat.co/projects/github-com-kuangcp-javatoolkit-master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/d2f2fda4824cc3c53be8/maintainability)](https://codeclimate.com/github/Kuangcp/JavaToolKit/maintainability)
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE.md) 
 [![Versuib](https://img.shields.io/github/tag/Kuangcp/JavaToolKit.svg)](https://github.com/Kuangcp/JavaToolKit/releases)
 
