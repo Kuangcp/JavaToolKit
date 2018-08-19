@@ -9,7 +9,8 @@ import java.time.Instant;
  */
 public enum GetRunTime {
 
-  INSTANCE;
+  GET_RUN_TIME;
+
   private long startRecord;
 
   public void startCount() {

@@ -11,7 +11,7 @@ import org.junit.Test;
  */
 public class GetRunTimeTest {
 
-  private GetRunTime getRunTime = GetRunTime.INSTANCE;
+  private GetRunTime getRunTime = GetRunTime.GET_RUN_TIME;
 
   @Test
   public void testStartCount() {
