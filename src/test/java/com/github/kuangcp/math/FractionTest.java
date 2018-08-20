@@ -21,7 +21,7 @@ public class FractionTest {
     assertThat(result, equalTo(new Fraction(3, 2)));
 
     result = result.add(new Fraction(2, 3));
-    assertThat(result, equalTo(new Fraction(13,6)));
+    assertThat(result, equalTo(new Fraction(13, 6)));
   }
 
   @Test
@@ -55,14 +55,14 @@ public class FractionTest {
   }
 
   @Test
-  public void testReductionOfFraction() throws Exception {
-    Fraction result = fraction.reductionOfFraction();
-    Assert.assertEquals(new Fraction(0, 0), result);
+  public void testReductionOfFraction() {
+    Fraction result = fraction.add(new Fraction(1893, -21)).reductionOfFraction();
+    System.out.println(result);
   }
 
   @Test
   public void testGreaterThanZero() throws Exception {
-    boolean result = fraction.isGreaterThanZero();
+    boolean result = fraction.isPositive();
     Assert.assertEquals(true, result);
   }
 

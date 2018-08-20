@@ -138,44 +138,43 @@ public class Fraction {
   }
 
   public boolean isMoreThan(Fraction other) {
-    return this.subtract(other).isGreaterThanZero();
+    return this.subtract(other).isPositive();
   }
 
-  /**
-   * 化简函数 使用辗转相除来求最小公约数进行化简 TODO 优化
-   */
   public Fraction reductionOfFraction() {
-    if (this.isInfinity() || this.isZero() || this.isOne()) {
+    if (this.isInfinity() || this.isZero()) {
       return this;
     }
-    Integer D, N;
-    D = Math.abs(this.getDenominator());
-    N = Math.abs(this.getNumerator());
+    if (this.isOne()) {
+      return this.changeToOne();
+    }
+
+    Integer denominator = this.getDenominator();
+    Integer numerator = this.getNumerator();
 
     Integer temp;
     //辗转相除来计算公约数
-    while (D != 0) {
-      temp = N % D;
-      N = D;
-      D = temp;
+    while (denominator != 0) {
+      temp = numerator % denominator;
+      numerator = denominator;
+      denominator = temp;
     }
-    if (N > 0) {
-      int tempD = 1;
-      if (this.getDenominator() < 0) {
-        tempD = -1;
-      }
-      this.setDenominator(tempD * this.getDenominator() / N);
-      this.setNumerator(tempD * this.getNumerator() / N);
+
+    if (this.isPositive()) {
+      this.setNumerator(Math.abs(this.getNumerator() / numerator));
+    } else {
+      this.setNumerator(-1 * Math.abs(this.getNumerator() / numerator));
     }
+    this.setDenominator(Math.abs(this.getDenominator() / numerator));
+
     return this;
   }
 
-  public boolean isGreaterThanZero() {
-    this.reductionOfFraction();
+  public boolean isPositive() {
     if (this.isInfinity() || this.isZero()) {
       return false;
     }
-    return this.getNumerator() > 0;
+    return this.getNumerator() > 0 && this.getDenominator() > 0;
   }
 
   public boolean isZero() {
@@ -186,8 +185,17 @@ public class Fraction {
   }
 
   public boolean isOne() {
-    this.reductionOfFraction();
-    return this.getNumerator() == 1 && this.getDenominator() == 1;
+    if (this.isInfinity() || this.isZero()) {
+      return false;
+    }
+    return this.getNumerator().equals(this.getDenominator());
+  }
+
+  public boolean isInteger() {
+    if (this.isOne()) {
+      return true;
+    }
+    return this.getDenominator() == 1;
   }
 
   public boolean isInfinity() {
@@ -196,6 +204,12 @@ public class Fraction {
 
   public Fraction changeToZero() {
     this.setNumerator(0);
+    this.setDenominator(1);
+    return this;
+  }
+
+  public Fraction changeToOne() {
+    this.setNumerator(1);
     this.setDenominator(1);
     return this;
   }
@@ -224,9 +238,9 @@ public class Fraction {
 
   @Override
   public String toString() {
-    if (1 == denominator) {
+    if (this.isInteger()) {
       return numerator + " ";
-    } else if (0 == denominator) {
+    } else if (this.isInfinity()) {
       return "Infinity";
     } else {
       return "" + numerator + "/" + denominator + " ";
