@@ -1,6 +1,6 @@
 package com.github.kuangcp.encode;
 
-import com.github.kuangcp.encode.Base64;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -38,8 +38,7 @@ public class Des3EncryptionUtil {
       byte[] keyByte = key.getBytes(CHAR_ENCODING);
       byte[] dataByte = data.getBytes(CHAR_ENCODING);
       byte[] valueByte = encode(keyByte, dataByte);
-      String value = new String(Base64.encode(valueByte), CHAR_ENCODING);
-      return value;
+      return new String(Base64.encode(valueByte), CHAR_ENCODING);
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -51,8 +50,7 @@ public class Des3EncryptionUtil {
       byte[] keyByte = key.getBytes(CHAR_ENCODING);
       byte[] valueByte = Base64.decode(value.getBytes(CHAR_ENCODING));
       byte[] dataByte = decode(keyByte, valueByte);
-      String data = new String(dataByte, CHAR_ENCODING);
-      return data;
+      return new String(dataByte, CHAR_ENCODING);
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -64,8 +62,7 @@ public class Des3EncryptionUtil {
       byte[] keyByte = key.getBytes(CHAR_ENCODING);
       byte[] dataByte = data.getBytes(CHAR_ENCODING);
       byte[] valueByte = encode(keyByte, dataByte);
-      String value = toHex(valueByte);
-      return value;
+      return toHex(valueByte);
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -77,8 +74,7 @@ public class Des3EncryptionUtil {
       byte[] keyByte = key.getBytes(CHAR_ENCODING);
       byte[] valueByte = fromHex(value);
       byte[] dataByte = decode(keyByte, valueByte);
-      String data = new String(dataByte, CHAR_ENCODING);
-      return data;
+      return new String(dataByte, CHAR_ENCODING);
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -91,8 +87,8 @@ public class Des3EncryptionUtil {
       IvParameterSpec IVSpec = new IvParameterSpec(new byte[8]);
       Cipher c = Cipher.getInstance("DESede/CBC/PKCS5Padding");
       c.init(1, k, ((IVSpec)));
-      byte output[] = c.doFinal(data.getBytes("UTF-8"));
-      return new String(Base64.encode(output), "UTF-8");
+      byte output[] = c.doFinal(data.getBytes(StandardCharsets.UTF_8));
+      return new String(Base64.encode(output), StandardCharsets.UTF_8);
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -104,8 +100,7 @@ public class Des3EncryptionUtil {
       DESedeKeySpec KeySpec = new DESedeKeySpec(UdpHexDecode(key));
       SecretKeyFactory KeyFactory = SecretKeyFactory
           .getInstance("DESede");
-      Key k = ((KeyFactory.generateSecret(((KeySpec)))));
-      return k;
+      return ((KeyFactory.generateSecret(((KeySpec)))));
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -114,13 +109,13 @@ public class Des3EncryptionUtil {
 
   public static String udpDecrypt(String key, String data) {
     try {
-      byte[] input = Base64.decode(data.getBytes("UTF-8"));
+      byte[] input = Base64.decode(data.getBytes(StandardCharsets.UTF_8));
       Key k = updGenerateKey(key);
       IvParameterSpec IVSpec = new IvParameterSpec(new byte[8]);
       Cipher c = Cipher.getInstance("DESede/CBC/PKCS5Padding");
       c.init(2, k, ((IVSpec)));
       byte output[] = c.doFinal(input);
-      return new String(output, "UTF-8");
+      return new String(output, StandardCharsets.UTF_8);
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -152,9 +147,9 @@ public class Des3EncryptionUtil {
     if (input == null) {
       return null;
     }
-    StringBuffer output = new StringBuffer(input.length * 2);
-    for (int i = 0; i < input.length; i++) {
-      int current = input[i] & 0xff;
+    StringBuilder output = new StringBuilder(input.length * 2);
+    for (byte anInput : input) {
+      int current = anInput & 0xff;
       if (current < 16) {
         output.append("0");
       }

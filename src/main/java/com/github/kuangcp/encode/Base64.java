@@ -1,6 +1,6 @@
 package com.github.kuangcp.encode;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 public class Base64 {
 
@@ -28,7 +28,7 @@ public class Base64 {
   /**
    * The base length.
    */
-  static final int BASELENGTH = 255;
+  static final int BASE_LENGTH = 255;
 
   /**
    * Lookup length.
@@ -38,22 +38,22 @@ public class Base64 {
   /**
    * Used to calculate the number of bits in a byte.
    */
-  static final int EIGHTBIT = 8;
+  static final int EIGHT_BIT = 8;
 
   /**
    * Used when encoding something which has fewer than 24 bits.
    */
-  static final int SIXTEENBIT = 16;
+  static final int SIXTEEN_BIT = 16;
 
   /**
    * Used to determine how many bits data contains.
    */
-  static final int TWENTYFOURBITGROUP = 24;
+  static final int TWENTY_FOUR_BIT_GROUP = 24;
 
   /**
    * Used to get the number of Quadruples.
    */
-  static final int FOURBYTE = 4;
+  static final int FOUR_BYTE = 4;
 
   /**
    * Used to test the sign of a byte.
@@ -67,12 +67,12 @@ public class Base64 {
 
   // Create arrays to hold the base64 characters and a
   // lookup for base64 chars
-  private static byte[] base64Alphabet = new byte[BASELENGTH];
+  private static byte[] base64Alphabet = new byte[BASE_LENGTH];
   private static byte[] lookUpBase64Alphabet = new byte[LOOKUPLENGTH];
 
   // Populating the lookup and character arrays
   static {
-    for (int i = 0; i < BASELENGTH; i++) {
+    for (int i = 0; i < BASE_LENGTH; i++) {
       base64Alphabet[i] = (byte) -1;
     }
     for (int i = 'Z'; i >= 'A'; i--) {
@@ -104,19 +104,12 @@ public class Base64 {
     lookUpBase64Alphabet[63] = (byte) '/';
   }
 
-  private static boolean isBase64(byte octect) {
-    if (octect == PAD) {
+  private static boolean isBase64(byte target) {
+    if (target == PAD) {
       return true;
-    } else if (base64Alphabet[octect] == -1) {
-      return false;
     } else {
-      return true;
+      return base64Alphabet[target] != -1;
     }
-  }
-
-  public static void main(String[] args) {
-    String decodestr = new String(decode("MTE2LjQ2Mzg0NzU1MDg0".getBytes()));
-    System.out.println(decodestr);
   }
 
   /**
@@ -137,8 +130,8 @@ public class Base64 {
       // return false;
       return true;
     }
-    for (int i = 0; i < length; i++) {
-      if (!isBase64(arrayOctect[i])) {
+    for (byte anArrayOctect : arrayOctect) {
+      if (!isBase64(anArrayOctect)) {
         return false;
       }
     }
@@ -187,9 +180,9 @@ public class Base64 {
    * @return Base64-encoded data.
    */
   public static byte[] encodeBase64(byte[] binaryData, boolean isChunked) {
-    int lengthDataBits = binaryData.length * EIGHTBIT;
-    int fewerThan24bits = lengthDataBits % TWENTYFOURBITGROUP;
-    int numberTriplets = lengthDataBits / TWENTYFOURBITGROUP;
+    int lengthDataBits = binaryData.length * EIGHT_BIT;
+    int fewerThan24bits = lengthDataBits % TWENTY_FOUR_BIT_GROUP;
+    int numberTriplets = lengthDataBits / TWENTY_FOUR_BIT_GROUP;
     byte encodedData[] = null;
     int encodedDataLength = 0;
     int nbrChunks = 0;
@@ -270,7 +263,7 @@ public class Base64 {
     // form integral number of 6-bit groups
     dataIndex = i * 3;
 
-    if (fewerThan24bits == EIGHTBIT) {
+    if (fewerThan24bits == EIGHT_BIT) {
       b1 = binaryData[dataIndex];
       k = (byte) (b1 & 0x03);
       // log.debug("b1=" + b1);
@@ -281,7 +274,7 @@ public class Base64 {
       encodedData[encodedIndex + 1] = lookUpBase64Alphabet[k << 4];
       encodedData[encodedIndex + 2] = PAD;
       encodedData[encodedIndex + 3] = PAD;
-    } else if (fewerThan24bits == SIXTEENBIT) {
+    } else if (fewerThan24bits == SIXTEEN_BIT) {
 
       b1 = binaryData[dataIndex];
       b2 = binaryData[dataIndex + 1];
@@ -327,9 +320,9 @@ public class Base64 {
       return new byte[0];
     }
 
-    int numberQuadruple = base64Data.length / FOURBYTE;
-    byte decodedData[] = null;
-    byte b1 = 0, b2 = 0, b3 = 0, b4 = 0, marker0 = 0, marker1 = 0;
+    int numberQuadruple = base64Data.length / FOUR_BYTE;
+    byte decodedData[];
+    byte b1, b2, b3, b4, marker0, marker1;
 
     // Throw away anything not in base64Data
 
@@ -366,7 +359,7 @@ public class Base64 {
       } else if (marker0 == PAD) {
         // Two PAD e.g. 3c[Pad][Pad]
         decodedData[encodedIndex] = (byte) (b1 << 2 | b2 >> 4);
-      } else if (marker1 == PAD) {
+      } else {
         // One PAD e.g. 3cQ[Pad]
         b3 = base64Alphabet[marker0];
 
@@ -451,15 +444,14 @@ public class Base64 {
   // return new String(encode(result.getBytes("UTF-8")));
   // }
 
-  public static String decode(String cryptoStr)
-      throws UnsupportedEncodingException {
+  public static String decode(String cryptoStr) {
     if (cryptoStr.length() < 40) {
       return "";
     }
     try {
-      String tempStr = new String(decode(cryptoStr.getBytes("UTF-8")));
+      String tempStr = new String(decode(cryptoStr.getBytes(StandardCharsets.UTF_8)));
       String result = tempStr.substring(40, tempStr.length());
-      return new String(decode(result.getBytes("UTF-8")));
+      return new String(decode(result.getBytes(StandardCharsets.UTF_8)));
     } catch (ArrayIndexOutOfBoundsException ex) {
       ex.printStackTrace();
       return "";
