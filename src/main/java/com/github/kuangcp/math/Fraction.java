@@ -1,5 +1,7 @@
 package com.github.kuangcp.math;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by Myth on 2017/3/21
  * 将浮点数转换成分数，并提供相关操作方法 貌似是不可行的
@@ -43,48 +45,39 @@ public class Fraction {
    * init a fraction by string  ag: -12.3434
    */
   public static Fraction valueOf(String num) {
-    int numerator, denominator, minus;
-    String[] numberArray = num.split("\\.");
-
-    Fraction fraction = new Fraction();
-    if (num.startsWith("-")) {
-      minus = -1;
-      if (numberArray.length == 2) {
-        numerator = Integer.parseInt(numberArray[0].substring(1));
-        denominator = Integer.parseInt(numberArray[1]);
-        Double dd = Math.pow(10.0, numberArray[1].length());
-        Integer temp = dd.intValue();
-        fraction.setNumerator(minus * numerator * temp + denominator);
-        fraction.setDenominator(temp);
-      } else {
-        numerator = Integer.parseInt(num.substring(1));
-        fraction.setNumerator(minus * numerator);
-        fraction.setDenominator(1);
-      }
-      return fraction.reductionOfFraction();
+    boolean matches = Pattern.matches("^-?[0-9]*\\.?[0-9]*$", num);
+    if (!matches) {
+      throw new RuntimeException("this num is infinity: " + num);
     }
 
-    if (numberArray.length == 2) {
-      numerator = Integer.parseInt(numberArray[0]);
-      denominator = Integer.parseInt(numberArray[1]);
-      Double dd = Math.pow(10.0, numberArray[1].length());
-      Integer temp = dd.intValue();
-      fraction.setNumerator(numerator * temp + denominator);
-      fraction.setDenominator(temp);
+    String[] numberArray = num.split("\\.");
+    Fraction fraction = new Fraction();
+
+    int numerator = Integer.parseInt(numberArray[0]);
+    if (numberArray.length == 1) {
+      fraction.changeToOne().setNumerator(numerator);
     } else {
-      fraction.setNumerator(Integer.parseInt(num));
-      fraction.setDenominator(1);
+      int decimalDigits = numberArray[1].length();
+      int decimal = Integer.parseInt(numberArray[1]);
+      if (numerator < 0) {
+        decimal *= -1;
+      }
+
+      int denominator = (int) Math.pow(10.0, decimalDigits);
+      fraction.setNumerator(numerator * denominator + decimal);
+      fraction.setDenominator(denominator);
     }
     return fraction.reductionOfFraction();
   }
 
-  /**
-   * 加法运算
-   */
   public Fraction add(Fraction other) {
     this.reductionOfFraction();
     other.reductionOfFraction();
     Fraction result;
+
+    if (other.isInfinity() || this.isInfinity()) {
+      return new Fraction().changeToInfinity();
+    }
 
     if (this.getDenominator().equals(other.getDenominator())) {
       Integer numerator = this.getNumerator() + other.getNumerator();
@@ -95,6 +88,10 @@ public class Fraction {
       result = new Fraction(numerator, this.getDenominator() * other.getDenominator());
     }
     return result.reductionOfFraction();
+  }
+
+  public Fraction add(Integer other) {
+    return add(new Fraction(other));
   }
 
   public Fraction multiply(Fraction other) {
@@ -120,8 +117,15 @@ public class Fraction {
 
   public Fraction subtract(Fraction other) {
     Fraction fraction = new Fraction(other);
+    if (fraction.isInfinity()) {
+      return fraction;
+    }
     fraction.setNumerator(-1 * fraction.getNumerator());
     return add(fraction);
+  }
+
+  public Fraction substract(Integer other) {
+    return subtract(new Fraction(other));
   }
 
   public Fraction divide(Fraction other) {
@@ -137,8 +141,16 @@ public class Fraction {
     return multiply(result);
   }
 
+  public Fraction divide(Integer other) {
+    return divide(new Fraction(other));
+  }
+
   public boolean isMoreThan(Fraction other) {
     return this.subtract(other).isPositive();
+  }
+
+  public boolean isMoreThan(Integer other) {
+    return isMoreThan(new Fraction(other));
   }
 
   public Fraction reductionOfFraction() {
