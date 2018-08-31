@@ -13,6 +13,6 @@ bin/
 .project
 Servers/
 
-# Delete Secret Configuration Files
-mails.properties
-mysql.properties
+# module file 
+*.ini
+
