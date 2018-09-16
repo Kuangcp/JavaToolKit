@@ -1,6 +1,7 @@
 package com.github.kuangcp.time;
 
 import java.security.MessageDigest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -9,6 +10,7 @@ import org.junit.Test;
  *
  * @author kuangcp
  */
+@Ignore
 public class GetRunTimeTest {
 
   private GetRunTime getRunTime = GetRunTime.GET_RUN_TIME;
@@ -34,7 +36,7 @@ public class GetRunTimeTest {
   /**
    * Java 内置md5加密
    */
-  private static String MD5(String s) {
+  private static void MD5(String s) {
     char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
         'F'};
 
@@ -54,10 +56,9 @@ public class GetRunTimeTest {
         str[k++] = hexDigits[byte0 >>> 4 & 0xf];
         str[k++] = hexDigits[byte0 & 0xf];
       }
-      return new String(str);
+      System.out.println(str);
     } catch (Exception e) {
       e.printStackTrace();
-      return null;
     }
   }
 }
