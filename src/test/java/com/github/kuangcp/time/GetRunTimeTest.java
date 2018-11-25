@@ -61,4 +61,11 @@ public class GetRunTimeTest {
       e.printStackTrace();
     }
   }
+
+  @Test
+  public void testCount() {
+    getRunTime.startCount();
+    getRunTime.endCountOneLine("end count");
+  }
+
 }

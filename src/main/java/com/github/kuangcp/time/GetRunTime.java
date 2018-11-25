@@ -42,6 +42,7 @@ public enum GetRunTime {
   public void endCountOneLine(String info) {
     long end = Instant.now().toEpochMilli();
     long totalMillis = end - startRecord;
-    System.out.println("Info:  " + info + "  total:" + totalMillis + "ms");
+    String format = "Total:%6sms, Info: %s";
+    System.out.println(String.format(format, totalMillis, info));
   }
 }
